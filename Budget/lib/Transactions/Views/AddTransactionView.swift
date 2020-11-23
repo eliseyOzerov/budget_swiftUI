@@ -9,8 +9,6 @@
 import SwiftUI
 
 struct AddTransactionView: View {
-    @Binding var isShown: Bool
-    
     @State var type = TransactionType.expense
     @State var sumString = ""
     @State var category = ""
@@ -19,20 +17,28 @@ struct AddTransactionView: View {
     
     var sum: Double { Double(sumString.replacingOccurrences(of: ",", with: ".")) ?? 0.00 }
     
-    @State private var errorShowing = false
+    var onDone: (Transaction) -> Void
+    var onCancel: () -> Void
     
     var body: some View {
         NavigationView {
             VStack(alignment: .leading, spacing: 25) {
-                SheetTitleBar(title: "New transaction", onDone: {
-                    Transaction(
-                        date: date,
-                        total: sum,
-                        type: type,
-                        category: category,
-                        secondParty: source
-                    ).save(onSuccess: { isShown = false }, onError: { errorShowing = true })
-                }, onCancel: {isShown = false})
+                SheetTitleBar(
+                    title: "New transaction",
+                    doneText: "Add",
+                    onDone: {
+                        onDone(
+                            Transaction(
+                                date: date,
+                                total: sum,
+                                type: type,
+                                category: category,
+                                secondParty: source
+                            )
+                        )
+                    },
+                    onCancel: onCancel
+                )
                 Picker("Type", selection: $type) {
                     Text("Expense").tag(TransactionType.expense)
                     Text("Income").tag(TransactionType.income)
@@ -58,22 +64,22 @@ struct AddTransactionView: View {
             .padding()
             .navigationBarHidden(true)
         }
-        .alert(isPresented: $errorShowing) {
-            Alert(title: Text("Error"), message: Text("We were unable to save your transaction. Please try again."))
-        }
     }
 }
 
 struct AddTransactionView_Previews: PreviewProvider {
     static var previews: some View {
-        AddTransactionView(isShown: .constant(true))
-        //            .environment(\.colorScheme, .dark)
+        AddTransactionView(
+            onDone: { _ in },
+            onCancel: {}
+        )
     }
 }
 
 struct SheetTitleBar: View {
     
     var title: String
+    var doneText: String
     var onDone = {}
     var onCancel = {}
     
@@ -87,7 +93,7 @@ struct SheetTitleBar: View {
                 .font(.headline)
             Spacer()
             Button(action: onDone, label: {
-                Text("Add")
+                Text(doneText)
             })
         }
         .padding(.bottom)

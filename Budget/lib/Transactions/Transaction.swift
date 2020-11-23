@@ -51,30 +51,4 @@ import RealmSwift
     //MARK: - Realm stuff
     dynamic var id: ObjectId
     override class func primaryKey() -> String? { "id" }
-    
-    func save(onSuccess: () -> Void, onError: () -> Void) {
-        do {
-            let realm = try Realm()
-            try realm.write {
-                realm.add(self, update: .modified)
-            }
-            onSuccess()
-        } catch {
-            debugPrint(error)
-            onError()
-        }
-    }
-    
-    func delete(onSuccess: () -> Void, onError: () -> Void) {
-        do {
-            let realm = try Realm()
-            try realm.write {
-                realm.delete(self)
-            }
-            onSuccess()
-        } catch {
-            debugPrint(error)
-            onError()
-        }
-    }
 }
