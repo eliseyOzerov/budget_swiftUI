@@ -9,22 +9,63 @@
 import SwiftUI
 import RealmSwift
 
+enum TransactionListAlert {
+    case addError (value: String = "add")
+    case editError (value: String = "edit")
+    case deleteError (value: String = "delete")
+    case deleteConfirm (Transaction)
+}
+
 struct TransactionListView: View {
     
     @ObservedObject var list = ObservableRealmCollection<Transaction>(sortedBy: "date", ascending: false)
     
     @State var showAddSheet = false
-    @State var showAddErrorAlert = false
-    
     @State var showEditSheet = false
-    @State var showEditErrorAlert = false
     
-    @State var showDeleteConfirmAlert = false
-    @State var showDeleteErrorAlert = false
+    @State var showAlert = false
+    @State var alert: TransactionListAlert?
+    
+//    var transactions = [
+//        Transaction(),
+//        Transaction(),
+//        Transaction()
+//    ]
     
     var body: some View {
         NavigationView {
             VStack(alignment: .leading) {
+                HStack {
+                    Color.white.frame(width: 48, height: 0)
+                        .opacity(0)
+                    Spacer()
+                    Text("Transactions")
+                        .font(.system(size: 20, weight: .bold))
+                    Spacer()
+                    HStack {
+                        Button(action: {}, label: {
+                            Image(systemName: "line.horizontal.3.decrease")
+                                .frame(width: 24, height: 24)
+                        })
+                        Button(action: { showAddSheet = true }, label: {
+                            Image(systemName: "plus")
+                                .frame(width: 24, height: 24)
+                        })
+                        .sheet(isPresented: $showAddSheet) {
+                            AddTransactionView(
+                                onDone: {
+                                    list.add(object: $0, onSuccess: {showAddSheet = false}, onError: {
+                                        alert = .addError()
+                                        showAlert = true
+                                    })
+                                },
+                                onCancel: { showAddSheet = false }
+                            )
+                        }
+                    }
+                }
+                .padding()
+                
                 GeometryReader { geo in
                     ScrollView {
                         VStack(spacing: 0) {
@@ -34,14 +75,20 @@ struct TransactionListView: View {
                                         model: transaction,
                                         cardSize: geo.size,
                                         onPressed: { showEditSheet = true },
-                                        onDelete: { list.delete(object: transaction, onSuccess: {}, onError: {}) }
+                                        onDelete: {
+                                            alert = .deleteConfirm (transaction)
+                                            showAlert = true
+                                        }
                                     )
                                     .transition(AnyTransition.scale)
                                     .sheet(isPresented: $showEditSheet) {
                                         EditTransactionView(
                                             transaction: transaction,
                                             onDone: {
-                                                list.add(object: $0, onSuccess: {}, onError: { showEditErrorAlert = true})
+                                                list.add(object: $0, onSuccess: { showEditSheet = false }, onError: {
+                                                    alert = .editError()
+                                                    showAlert = true
+                                                })
                                             },
                                             onCancel: { showEditSheet = false }
                                         )
@@ -50,31 +97,28 @@ struct TransactionListView: View {
                             }
                         }
                     }
-                    .listStyle(InsetListStyle())
-                    .navigationTitle("Transactions")
-                    .toolbar {
-                        ToolbarItem(placement: .navigationBarTrailing) {
-                            Button(action: {}, label: {
-                                Image(systemName: "line.horizontal.3.decrease")
-                                    .frame(width: 24, height: 24)
-                            })
-                        }
-                        ToolbarItem(placement: .navigationBarTrailing) {
-                            Button(action: { showAddSheet = true }, label: {
-                                Image(systemName: "plus")
-                                    .frame(width: 24, height: 24)
-                            })
-                            .sheet(isPresented: self.$showAddSheet) {
-                                AddTransactionView(
-                                    onDone: {
-                                        list.add(object: $0, onSuccess: {}, onError: { showAddErrorAlert = true})
-                                    },
-                                    onCancel: { showAddSheet = false }
-                                )
-                            }
-                        }
-                    }
                     .animation(.spring(), value: list.results)
+                }
+            }
+            .navigationBarHidden(true)
+            .alert(isPresented: $showAlert) {
+                switch alert {
+                case .addError(let value), .editError(let value), .deleteError(let value):
+                    return Alert(
+                        title: Text("Error"),
+                        message: Text("We were unable to \(value) this transaction. Please try again."),
+                        dismissButton: .default(Text("Ok"))
+                    )
+                case .deleteConfirm (let transaction):
+                    return Alert(
+                        title: Text("Are you sure?"),
+                        message: Text("This action is irreversible."),
+                        primaryButton: .destructive(Text("Delete")) {
+                            list.delete(object: transaction, onSuccess: {}, onError: {})
+                        },
+                        secondaryButton: .cancel())
+                case .none:
+                    return Alert(title: Text("Dummy"))
                 }
             }
         }

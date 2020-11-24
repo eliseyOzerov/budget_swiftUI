@@ -28,7 +28,8 @@ struct TransactionCardView: View {
     
     
     var body: some View {
-            HStack(spacing: 0) {
+        HStack(spacing: 0) {
+            Button(action: onPressed) {
                 VStack(alignment: .leading, spacing: 10) {
                     HStack(alignment: .firstTextBaseline, spacing: 12) {
                         Text(model.category)
@@ -53,60 +54,40 @@ struct TransactionCardView: View {
                 .padding(.vertical, 8)
                 .frame(width: cardSize.width)
                 .gesture(
-                    DragGesture(minimumDistance: 0, coordinateSpace: .local)
+                    DragGesture(minimumDistance: 10, coordinateSpace: .local)
                         .onChanged { value in
-                            if abs(value.translation.width) < 10 {
-                                shouldCallOnPressed = true
-                            } else {
-                                shouldCallOnPressed = false
-                            }
-                            withAnimation(.linear(duration: 0.1)) {
-                                showOverlay = true
+                            withAnimation(.spring(response: 0.4, dampingFraction: 0.7, blendDuration: 0)) {
+                                if !open && value.translation.width < 0 || // drag left
+                                    open && offset < 0 && value.translation.width > 0 { // drag right
+                                    offset = startOffset + value.translation.width
+                                    lastChange = value.translation.width
+                                }
                             }
                         }
                         .onEnded { _ in
-                            if shouldCallOnPressed {
-                                onPressed()
-                            }
-                            withAnimation(.linear(duration: 0.1)) {
-                                showOverlay = false
-                            }
-                        }.simultaneously(
-                            with: DragGesture(minimumDistance: 10, coordinateSpace: .local)
-                                .onChanged { value in
-                                    withAnimation(.spring(response: 0.4, dampingFraction: 0.7, blendDuration: 0)) {
-                                        if !open && value.translation.width < 0 || // drag left
-                                            open && offset < 0 && value.translation.width > 0 { // drag right
-                                            offset = startOffset + value.translation.width
-                                            lastChange = value.translation.width
-                                        }
-                                    }
-
+                            withAnimation(.spring(response: 0.4, dampingFraction: 0.7, blendDuration: 0)) {
+                                if open && lastChange > 0 {
+                                    offset = 0
+                                    open = false
+                                } else if !open && lastChange < 0 {
+                                    offset = openOffset
+                                    open = true
                                 }
-                                .onEnded { _ in
-                                    withAnimation(.spring(response: 0.4, dampingFraction: 0.7, blendDuration: 0)) {
-                                        if open && lastChange > 0 {
-                                            offset = 0
-                                            open = false
-                                        } else if !open && lastChange < 0 {
-                                            offset = openOffset
-                                            open = true
-                                        }
-                                        startOffset = offset
-                                    }
-                                }
-                        )
-
+                                startOffset = offset
+                            }
+                        }
                 )
-                
-                Button(action: onDelete) {
-                    Image(systemName: "trash")
-                        .foregroundColor(Color("red"))
-                        .frame(width: 44, height: 44)
-                }
             }
-            .offset(x: offset)
+            .buttonStyle(PlainButtonStyle())
+            
+            Button(action: onDelete) {
+                Image(systemName: "trash")
+                    .foregroundColor(Color("red"))
+                    .frame(width: 44, height: 44)
+            }
         }
+        .offset(x: offset)
+    }
 }
 
 struct TransactionCardView_Previews: PreviewProvider {
