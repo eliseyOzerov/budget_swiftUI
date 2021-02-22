@@ -9,6 +9,19 @@
 import SwiftUI
 
 struct ContentView: View {
+    
+    func styleNavBar() {
+        let appearance = UINavigationBarAppearance()
+        appearance.shadowColor = .clear
+        appearance.backgroundColor = .systemGroupedBackground
+        UINavigationBar.appearance().standardAppearance = appearance
+        UINavigationBar.appearance().scrollEdgeAppearance = appearance
+    }
+    
+    init() {
+        styleNavBar()
+    }
+    
     var body: some View {
         MainView()
     }
@@ -25,23 +38,19 @@ struct MainView: View {
         TabView {
             HomeView()
                 .tabItem {
-                    Image(systemName: "house").frame(width: 24, height: 24)
-                    Text("Home")
+                    Label("Home", systemImage: "house")
                 }
             TransactionListView()
                 .tabItem {
-                    Image(systemName: "list.dash")
-                    Text("Transactions")
+                    Label("Transactions", systemImage: "list.bullet")
                 }
-            WishlistView()
+            SavingsView()
                 .tabItem {
-                    Image(systemName: "bookmark").frame(width: 24, height: 24)
-                    Text("Wishlist")
+                    Label("Savings", systemImage: "bitcoinsign.circle")
                 }
             SettingsView()
                 .tabItem {
-                    Image(systemName: "gearshape").frame(width: 24, height: 24)
-                    Text("Settings")
+                    Label("Settings", systemImage: "gearshape")
                 }
         }
     }

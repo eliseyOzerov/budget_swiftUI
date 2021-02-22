@@ -18,10 +18,7 @@ class BudgetTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-    }
+    
 
     func testPerformanceExample() throws {
         // This is an example of a performance test case.
@@ -30,4 +27,30 @@ class BudgetTests: XCTestCase {
         }
     }
 
+}
+
+class AuthenticatorTests: XCTestCase {
+    func testEmailPasswordCorrectLogin() throws {
+        let promise = expectation(description: "true")
+        
+        Authenticator().emailPasswordLogin(email: "eliseyozerov@outlook.com", password: "Iwilalnaiwg$*!1", onSuccess: { user in
+            promise.fulfill()
+        }, onError: { error in
+            XCTFail("Error logging in: \(error.message)")
+        })
+        
+        wait(for: [promise], timeout: 5)
+    }
+    
+    func testEmailPasswordIncorrectLogin() throws {
+        let promise = expectation(description: "true")
+        
+        Authenticator().emailPasswordLogin(email: "eliseyozerovm", password: "1", onSuccess: { user in
+            XCTFail("Logged in successfully: \(user.email)")
+        }, onError: { error in
+            promise.fulfill()
+        })
+        
+        wait(for: [promise], timeout: 5)
+    }
 }

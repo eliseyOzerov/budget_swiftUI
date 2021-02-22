@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1220"
+   LastUpgradeVersion = "1230"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E32AC5BE2559791700B6F3AB"
+               BlueprintIdentifier = "E32EF6AC256CF0D9007138B6"
                BuildableName = "Budget.app"
                BlueprintName = "Budget"
                ReferencedContainer = "container:Budget.xcodeproj">
@@ -44,7 +44,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "E32AC5BE2559791700B6F3AB"
+            BlueprintIdentifier = "E32EF6AC256CF0D9007138B6"
             BuildableName = "Budget.app"
             BlueprintName = "Budget"
             ReferencedContainer = "container:Budget.xcodeproj">
@@ -61,7 +61,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "E32AC5BE2559791700B6F3AB"
+            BlueprintIdentifier = "E32EF6AC256CF0D9007138B6"
             BuildableName = "Budget.app"
             BlueprintName = "Budget"
             ReferencedContainer = "container:Budget.xcodeproj">
