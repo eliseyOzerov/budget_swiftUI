@@ -15,28 +15,26 @@ struct PickerOptionsView<T>: View where T: Titled, T: Identifiable {
     init(options: [T], selection: Binding<T>) {
         self._selection = selection
         self.options = options
-        
     }
     
     var body: some View {
         NavigationView {
-//            List {
-                List(options) { option in
-                    HStack {
-                        Text(option.title)
-                            .onTapGesture {
-                                selection = option
-                                presentation.wrappedValue.dismiss()
-                            }
-                        if selection.id == option.id {
-                            Spacer()
-                            Image(systemName: "checkmark")
-                                .font(.system(size: 16, weight: .bold))
-                                .foregroundColor(.blue)
+            List(options) { option in
+                HStack {
+                    Text(option.title)
+                        .onTapGesture {
+                            selection = option
+                            presentation.wrappedValue.dismiss()
                         }
+                    if selection.id == option.id {
+                        Spacer()
+                        Image(systemName: "checkmark")
+                            .font(.system(size: 16, weight: .bold))
+                            .foregroundColor(.blue)
                     }
                 }
-//            }
+            }
+            .padding(.top)
             .listStyle(InsetGroupedListStyle())
             .background(Color(UIColor.systemGroupedBackground))
             .edgesIgnoringSafeArea(.bottom)

@@ -78,9 +78,11 @@ struct AddFundView: View {
                 }
                 Section(header: Text("Goal")) {
                     TextField(0.0.toCurrencyString(), text: goalBinding)
+                        .keyboardType(.numberPad)
                 }
                 Section(header: Text("Currently saved")) {
                     TextField(0.0.toCurrencyString(), text: currentBinding)
+                        .keyboardType(.numberPad)
                 }
             }
             .navigationTitle("New goal")

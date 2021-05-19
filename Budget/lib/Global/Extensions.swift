@@ -7,6 +7,13 @@
 //
 
 import SwiftUI
+import UIKit
+
+extension View {
+    func hideKeyboard() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+    }
+}
 
 extension UIColor {
 
@@ -51,15 +58,29 @@ extension Date {
     private var calendar: Calendar {
         var calendar = Calendar.current
         calendar.timeZone = TimeZone.current
+        calendar.locale = Locale.current
         return calendar
+    }
+    
+    init(from components: DateComponents) {
+        self = Calendar.current.date(from: components)!
     }
     
     var year: Int { calendar.component(.year, from: self) }
     var month: Int { calendar.component(.month, from: self) }
     var day: Int { calendar.component(.day, from: self) }
+    var weekday: Int {
+        var index = calendar.component(.weekday, from: self) - calendar.firstWeekday
+        if index < 0 {
+            index = index + 7
+        }
+        return index
+    }
     var hour: Int { calendar.component(.hour, from: self) }
     var minute: Int { calendar.component(.minute, from: self) }
     var second: Int { calendar.component(.second, from: self) }
+    
+    static var weekdaySymbols: [String] { DateFormatter().weekdaySymbols }
     
     func time(as format: String = "HH:mm") -> String {
         let formatter = DateFormatter()
@@ -104,7 +125,6 @@ extension Date {
     func endOfDay() -> Date {
         return calendar.date(byAdding: .day, value: 1, to: startOfDay())!
     }
-    
 }
 
 extension String {
@@ -122,7 +142,8 @@ extension Double {
     func toCurrencyString() -> String {
         // define the formatter
         let formatter = NumberFormatter()
-        formatter.numberStyle = .currencyAccounting
+        formatter.numberStyle = .currency
+        formatter.locale = .init(identifier: "si_SI")
         formatter.maximumFractionDigits = 2
         formatter.minimumFractionDigits = 2
         // format the double

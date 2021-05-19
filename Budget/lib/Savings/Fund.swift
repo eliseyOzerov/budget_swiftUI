@@ -8,7 +8,7 @@
 import Foundation
 import RealmSwift
 
-class Fund: Hashable, Identifiable, ObservableObject, Titled {
+class Fund: Hashable, Identifiable, ObservableObject, Titled, RealmOptionalType {
     
     var id: ObjectId?
     @Published var title: String = "SomeTitle"

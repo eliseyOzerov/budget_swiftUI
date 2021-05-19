@@ -10,6 +10,14 @@ import SwiftUI
 
 struct TransactionCardView: View {
     var transaction: Transaction
+
+    var totalColor: Color {
+        switch transaction.type {
+        case .income, .withdrawal: return Color("green")
+        case .expense, .deposit: return Color("red")
+        case .transfer: return Color.gray
+        }
+    }
     
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -22,7 +30,7 @@ struct TransactionCardView: View {
                 Spacer()
                 Text(transaction.total.toCurrencyString())
                     .font(.headline)
-                    .foregroundColor(Color(transaction.type == TransactionType.expense ? "red" : "green"))
+                    .foregroundColor(totalColor)
             }
             Text(transaction.secondParty)
                 .font(.caption)

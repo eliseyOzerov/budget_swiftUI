@@ -12,6 +12,9 @@ import RealmSwift
 @objc enum TransactionType: Int, RealmEnum {
     case income
     case expense
+    case deposit
+    case withdrawal
+    case transfer
 }
 
 class Transaction: Hashable, Identifiable {
@@ -22,6 +25,14 @@ class Transaction: Hashable, Identifiable {
     var type: TransactionType = .income
     var category: String = "FUCKING BITCH"
     var secondParty: String = "Tovarna idej d.o.o."
+    
+    var totalSigned: Double {
+        switch type {
+        case .income, .withdrawal: return total
+        case .expense, .deposit: return -total
+        case .transfer: return 0
+        }
+    }
 
     init(from db: TransactionDB) {
         self.id = db.id
@@ -117,5 +128,13 @@ class Transaction: Hashable, Identifiable {
         self.type = transaction.type
         self.category = transaction.category
         self.secondParty = transaction.secondParty
+    }
+    
+    var totalSigned: Double {
+        switch type {
+        case .income, .withdrawal: return total
+        case .expense, .deposit: return -total
+        case .transfer: return 0
+        }
     }
 }

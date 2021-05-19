@@ -1,5 +1,5 @@
 //
-//  HomeView.swift
+//  SettingsView.swift
 //  Budget
 //
 //  Created by Elisey Ozerov on 15/11/2020.
@@ -8,14 +8,18 @@
 
 import SwiftUI
 
-struct HomeView: View {
+struct SettingsView: View {
     var body: some View {
-        Text("Home")
+        NavigationView {
+            List {
+                
+            }
+        }
     }
 }
 
-struct HomeView_Previews: PreviewProvider {
+struct SettingsView_Previews: PreviewProvider {
     static var previews: some View {
-        HomeView()
+        SettingsView()
     }
 }

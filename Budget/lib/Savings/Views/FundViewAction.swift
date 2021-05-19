@@ -15,6 +15,8 @@ enum EditAction: String {
 }
 
 struct FundViewAction: View {
+    @EnvironmentObject var transactionsModel: TransactionsViewModel
+    
     @ObservedObject var model: SavingsViewModel
     @ObservedObject var fund: Fund
     @State var isActive = false
@@ -182,13 +184,40 @@ struct FundViewAction: View {
                         switch editAction {
                         case .deposit:
                             fund.current += actionAmount
+                            transactionsModel.addModifyTx(
+                                Transaction(
+                                    date: Date(),
+                                    total: actionAmount,
+                                    type: .deposit,
+                                    category: "Deposit",
+                                    secondParty: fund.title
+                                )
+                            )
                             break
                         case .withdraw:
                             fund.current -= actionAmount
+                            transactionsModel.addModifyTx(
+                                Transaction(
+                                    date: Date(),
+                                    total: actionAmount,
+                                    type: .withdrawal,
+                                    category: "Withdrawal",
+                                    secondParty: fund.title
+                                )
+                            )
                             break
                         case .transfer:
                             fund.current -= actionAmount
                             transferRecepient!.current += actionAmount
+                            transactionsModel.addModifyTx(
+                                Transaction(
+                                    date: Date(),
+                                    total: actionAmount,
+                                    type: .transfer,
+                                    category: "Transfer",
+                                    secondParty: "\(fund.title) -> \(transferRecepient!.title)"
+                                )
+                            )
                             break
                         }
                         actionAmountString = ""
@@ -239,9 +268,10 @@ struct ProgressBarStyleNoBgr: ProgressViewStyle {
 struct FundViewAction_Previews: PreviewProvider {
     static var previews: some View {
         FundViewAction(model: SavingsViewModel(), fund: Fund())
+            .environmentObject(TransactionsViewModel())
     }
 }
 
 protocol Titled {
-    var title: String {get set}
+    var title: String {get}
 }

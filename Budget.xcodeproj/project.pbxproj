@@ -8,13 +8,15 @@
 
 /* Begin PBXBuildFile section */
 		C29AA5AF1EB4C5C0FEE2AF87 /* Pods_Budget.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D44361EBE264FE453C453BA /* Pods_Budget.framework */; };
+		E30420B525E6B8C800ED0C65 /* CustomDatePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E30420B425E6B8C800ED0C65 /* CustomDatePickerView.swift */; };
 		E31D496925DD3BAF00A51358 /* SavingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E31D496825DD3BAF00A51358 /* SavingsView.swift */; };
 		E31D496E25DD3C7A00A51358 /* FundCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E31D496D25DD3C7A00A51358 /* FundCardView.swift */; };
 		E31F918A25DD5AC500A9C383 /* FundViewAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E31F918925DD5AC500A9C383 /* FundViewAction.swift */; };
 		E320472E256CFE1000646F0C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E320472D256CFE1000646F0C /* GoogleService-Info.plist */; };
+		E325B3F725F7C7CA0002D43D /* OverviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E325B3F625F7C7CA0002D43D /* OverviewView.swift */; };
 		E32EF6B1256CF0D9007138B6 /* BudgetApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E32EF6B0256CF0D9007138B6 /* BudgetApp.swift */; };
 		E32EF6B8256CF0DD007138B6 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E32EF6B7256CF0DD007138B6 /* Preview Assets.xcassets */; };
-		E32EF6C3256CF0DE007138B6 /* BudgetTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E32EF6C2256CF0DE007138B6 /* BudgetTests.swift */; };
+		E32EF6C3256CF0DE007138B6 /* ResetTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E32EF6C2256CF0DE007138B6 /* ResetTests.swift */; };
 		E32EF6CE256CF0DE007138B6 /* BudgetUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E32EF6CD256CF0DE007138B6 /* BudgetUITests.swift */; };
 		E32EF6F2256CF22A007138B6 /* Transaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E32EF6E1256CF22A007138B6 /* Transaction.swift */; };
 		E32EF6F4256CF22A007138B6 /* TransactionCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E32EF6E4256CF22A007138B6 /* TransactionCardView.swift */; };
@@ -24,18 +26,23 @@
 		E32EF6F8256CF22A007138B6 /* ObservableRealmCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = E32EF6E9256CF22A007138B6 /* ObservableRealmCollection.swift */; };
 		E32EF6F9256CF22A007138B6 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E32EF6EA256CF22A007138B6 /* Extensions.swift */; };
 		E32EF6FA256CF22A007138B6 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E32EF6EC256CF22A007138B6 /* SettingsView.swift */; };
-		E32EF6FB256CF22A007138B6 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E32EF6ED256CF22A007138B6 /* HomeView.swift */; };
+		E32EF6FB256CF22A007138B6 /* BudgetsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E32EF6ED256CF22A007138B6 /* BudgetsView.swift */; };
 		E32EF708256CF26A007138B6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E32EF707256CF26A007138B6 /* Assets.xcassets */; };
-		E34C5F29257D1CEA00311A75 /* Authenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34C5F28257D1CEA00311A75 /* Authenticator.swift */; };
 		E35B5C5425DC1FAF00E7EBAC /* Fund.swift in Sources */ = {isa = PBXBuildFile; fileRef = E35B5C5325DC1FAF00E7EBAC /* Fund.swift */; };
-		E372626E25A0986E00F0A8DA /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = E372626D25A0986E00F0A8DA /* Realm */; };
-		E372627025A0986E00F0A8DA /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = E372626F25A0986E00F0A8DA /* RealmSwift */; };
+		E36FF9E32653F27800E45AED /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = E36FF9E22653F27800E45AED /* Realm */; };
+		E36FF9E52653F27800E45AED /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = E36FF9E42653F27800E45AED /* RealmSwift */; };
 		E372878E25A4DFFE007AA92F /* TransactionFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E372878D25A4DFFE007AA92F /* TransactionFilter.swift */; };
 		E383AF0825DEFAD70051C78F /* AddFundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E383AF0725DEFAD70051C78F /* AddFundView.swift */; };
+		E384C79D2652ACA80085C9AE /* TransactionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E384C79C2652ACA80085C9AE /* TransactionTests.swift */; };
 		E397D7902570E514009222D1 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E397D78F2570E514009222D1 /* LoginView.swift */; };
 		E397D79D2570E579009222D1 /* TextFieldModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = E397D79C2570E579009222D1 /* TextFieldModifier.swift */; };
+		E3A5BC0C25FFE1040033FE69 /* TagCloudView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3A5BC0B25FFE1030033FE69 /* TagCloudView.swift */; };
+		E3B75D2625E99ED3009D98A6 /* GeneralLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B75D2525E99ED3009D98A6 /* GeneralLibrary.swift */; };
 		E3BEB61525E0253700B36012 /* PickerOptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3BEB61425E0253700B36012 /* PickerOptionsView.swift */; };
 		E3BEB61D25E0F94B00B36012 /* EditFundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3BEB61C25E0F94B00B36012 /* EditFundView.swift */; };
+		E3C1635425E553AD000D2BA5 /* Budget.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3C1635325E553AD000D2BA5 /* Budget.swift */; };
+		E3C1635A25E56503000D2BA5 /* BudgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3C1635925E56503000D2BA5 /* BudgetView.swift */; };
+		E3D26D7F25E56DB600F560E5 /* BudgetCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D26D7E25E56DB600F560E5 /* BudgetCardView.swift */; };
 		E3FE886E25A237DF00CC3856 /* TransactionFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3FE886D25A237DE00CC3856 /* TransactionFilterView.swift */; };
 /* End PBXBuildFile section */
 
@@ -60,16 +67,18 @@
 		2D44361EBE264FE453C453BA /* Pods_Budget.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Budget.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		566E698332B29FD00777A59A /* Pods-Budget.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Budget.debug.xcconfig"; path = "Target Support Files/Pods-Budget/Pods-Budget.debug.xcconfig"; sourceTree = "<group>"; };
 		C11F18C48C8D3C841259FE5F /* Pods-Budget.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Budget.release.xcconfig"; path = "Target Support Files/Pods-Budget/Pods-Budget.release.xcconfig"; sourceTree = "<group>"; };
+		E30420B425E6B8C800ED0C65 /* CustomDatePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomDatePickerView.swift; sourceTree = "<group>"; };
 		E31D496825DD3BAF00A51358 /* SavingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavingsView.swift; sourceTree = "<group>"; };
 		E31D496D25DD3C7A00A51358 /* FundCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FundCardView.swift; sourceTree = "<group>"; };
 		E31F918925DD5AC500A9C383 /* FundViewAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FundViewAction.swift; sourceTree = "<group>"; };
 		E320472D256CFE1000646F0C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		E325B3F625F7C7CA0002D43D /* OverviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverviewView.swift; sourceTree = "<group>"; };
 		E32EF6AD256CF0D9007138B6 /* Budget.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Budget.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E32EF6B0256CF0D9007138B6 /* BudgetApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetApp.swift; sourceTree = "<group>"; };
 		E32EF6B7256CF0DD007138B6 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		E32EF6B9256CF0DD007138B6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E32EF6BE256CF0DE007138B6 /* BudgetTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BudgetTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		E32EF6C2256CF0DE007138B6 /* BudgetTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetTests.swift; sourceTree = "<group>"; };
+		E32EF6C2256CF0DE007138B6 /* ResetTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetTests.swift; sourceTree = "<group>"; };
 		E32EF6C4256CF0DE007138B6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E32EF6C9256CF0DE007138B6 /* BudgetUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BudgetUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E32EF6CD256CF0DE007138B6 /* BudgetUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetUITests.swift; sourceTree = "<group>"; };
@@ -82,16 +91,21 @@
 		E32EF6E9256CF22A007138B6 /* ObservableRealmCollection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObservableRealmCollection.swift; sourceTree = "<group>"; };
 		E32EF6EA256CF22A007138B6 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		E32EF6EC256CF22A007138B6 /* SettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
-		E32EF6ED256CF22A007138B6 /* HomeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		E32EF6ED256CF22A007138B6 /* BudgetsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BudgetsView.swift; sourceTree = "<group>"; };
 		E32EF707256CF26A007138B6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		E34C5F28257D1CEA00311A75 /* Authenticator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Authenticator.swift; sourceTree = "<group>"; };
 		E35B5C5325DC1FAF00E7EBAC /* Fund.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fund.swift; sourceTree = "<group>"; };
 		E372878D25A4DFFE007AA92F /* TransactionFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionFilter.swift; sourceTree = "<group>"; };
 		E383AF0725DEFAD70051C78F /* AddFundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFundView.swift; sourceTree = "<group>"; };
+		E384C79C2652ACA80085C9AE /* TransactionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionTests.swift; sourceTree = "<group>"; };
 		E397D78F2570E514009222D1 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		E397D79C2570E579009222D1 /* TextFieldModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldModifier.swift; sourceTree = "<group>"; };
+		E3A5BC0B25FFE1030033FE69 /* TagCloudView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagCloudView.swift; sourceTree = "<group>"; };
+		E3B75D2525E99ED3009D98A6 /* GeneralLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralLibrary.swift; sourceTree = "<group>"; };
 		E3BEB61425E0253700B36012 /* PickerOptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerOptionsView.swift; sourceTree = "<group>"; };
 		E3BEB61C25E0F94B00B36012 /* EditFundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditFundView.swift; sourceTree = "<group>"; };
+		E3C1635325E553AD000D2BA5 /* Budget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Budget.swift; sourceTree = "<group>"; };
+		E3C1635925E56503000D2BA5 /* BudgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetView.swift; sourceTree = "<group>"; };
+		E3D26D7E25E56DB600F560E5 /* BudgetCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetCardView.swift; sourceTree = "<group>"; };
 		E3FE886D25A237DE00CC3856 /* TransactionFilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionFilterView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -100,8 +114,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E372627025A0986E00F0A8DA /* RealmSwift in Frameworks */,
-				E372626E25A0986E00F0A8DA /* Realm in Frameworks */,
+				E36FF9E52653F27800E45AED /* RealmSwift in Frameworks */,
+				E36FF9E32653F27800E45AED /* Realm in Frameworks */,
 				C29AA5AF1EB4C5C0FEE2AF87 /* Pods_Budget.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -140,6 +154,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		E30DCB9D25F68BEC008E15B1 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				E32EF6EC256CF22A007138B6 /* SettingsView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
 		E31F918825DD5A8800A9C383 /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -150,6 +172,14 @@
 				E3BEB61C25E0F94B00B36012 /* EditFundView.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		E325B3F525F7C7BB0002D43D /* Overview */ = {
+			isa = PBXGroup;
+			children = (
+				E325B3F625F7C7CA0002D43D /* OverviewView.swift */,
+			);
+			path = Overview;
 			sourceTree = "<group>";
 		};
 		E32EF6A4256CF0D9007138B6 = {
@@ -179,7 +209,6 @@
 			children = (
 				E32EF707256CF26A007138B6 /* Assets.xcassets */,
 				E32EF6DF256CF22A007138B6 /* lib */,
-				E32EF6B0256CF0D9007138B6 /* BudgetApp.swift */,
 				E32EF6B9256CF0DD007138B6 /* Info.plist */,
 				E320472D256CFE1000646F0C /* GoogleService-Info.plist */,
 				E32EF6B6256CF0DD007138B6 /* Preview Content */,
@@ -198,8 +227,9 @@
 		E32EF6C1256CF0DE007138B6 /* BudgetTests */ = {
 			isa = PBXGroup;
 			children = (
-				E32EF6C2256CF0DE007138B6 /* BudgetTests.swift */,
+				E32EF6C2256CF0DE007138B6 /* ResetTests.swift */,
 				E32EF6C4256CF0DE007138B6 /* Info.plist */,
+				E384C79C2652ACA80085C9AE /* TransactionTests.swift */,
 			);
 			path = BudgetTests;
 			sourceTree = "<group>";
@@ -216,12 +246,15 @@
 		E32EF6DF256CF22A007138B6 /* lib */ = {
 			isa = PBXGroup;
 			children = (
+				E32EF6B0256CF0D9007138B6 /* BudgetApp.swift */,
+				E32EF6E7256CF22A007138B6 /* ContentView.swift */,
+				E325B3F525F7C7BB0002D43D /* Overview */,
+				E30DCB9D25F68BEC008E15B1 /* Settings */,
+				E3CE4BE125E4183700B15D7D /* Budget */,
+				E3CE4BE025E4182600B15D7D /* Authentication */,
 				E35B5C5225DC1EB000E7EBAC /* Savings */,
 				E32EF6E0256CF22A007138B6 /* Transactions */,
-				E32EF6E7256CF22A007138B6 /* ContentView.swift */,
 				E32EF6E8256CF22A007138B6 /* Global */,
-				E397D78F2570E514009222D1 /* LoginView.swift */,
-				E34C5F28257D1CEA00311A75 /* Authenticator.swift */,
 			);
 			path = lib;
 			sourceTree = "<group>";
@@ -252,8 +285,9 @@
 			children = (
 				E32EF6E9256CF22A007138B6 /* ObservableRealmCollection.swift */,
 				E32EF6EA256CF22A007138B6 /* Extensions.swift */,
-				E32EF6EB256CF22A007138B6 /* Views */,
 				E397D79C2570E579009222D1 /* TextFieldModifier.swift */,
+				E3B75D2525E99ED3009D98A6 /* GeneralLibrary.swift */,
+				E32EF6EB256CF22A007138B6 /* Views */,
 			);
 			path = Global;
 			sourceTree = "<group>";
@@ -261,9 +295,9 @@
 		E32EF6EB256CF22A007138B6 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				E32EF6EC256CF22A007138B6 /* SettingsView.swift */,
-				E32EF6ED256CF22A007138B6 /* HomeView.swift */,
+				E30420B425E6B8C800ED0C65 /* CustomDatePickerView.swift */,
 				E3BEB61425E0253700B36012 /* PickerOptionsView.swift */,
+				E3A5BC0B25FFE1030033FE69 /* TagCloudView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -275,6 +309,33 @@
 				E31F918825DD5A8800A9C383 /* Views */,
 			);
 			path = Savings;
+			sourceTree = "<group>";
+		};
+		E3C1635825E564EE000D2BA5 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				E32EF6ED256CF22A007138B6 /* BudgetsView.swift */,
+				E3C1635925E56503000D2BA5 /* BudgetView.swift */,
+				E3D26D7E25E56DB600F560E5 /* BudgetCardView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		E3CE4BE025E4182600B15D7D /* Authentication */ = {
+			isa = PBXGroup;
+			children = (
+				E397D78F2570E514009222D1 /* LoginView.swift */,
+			);
+			path = Authentication;
+			sourceTree = "<group>";
+		};
+		E3CE4BE125E4183700B15D7D /* Budget */ = {
+			isa = PBXGroup;
+			children = (
+				E3C1635325E553AD000D2BA5 /* Budget.swift */,
+				E3C1635825E564EE000D2BA5 /* Views */,
+			);
+			path = Budget;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -295,8 +356,8 @@
 			);
 			name = Budget;
 			packageProductDependencies = (
-				E372626D25A0986E00F0A8DA /* Realm */,
-				E372626F25A0986E00F0A8DA /* RealmSwift */,
+				E36FF9E22653F27800E45AED /* Realm */,
+				E36FF9E42653F27800E45AED /* RealmSwift */,
 			);
 			productName = Budget;
 			productReference = E32EF6AD256CF0D9007138B6 /* Budget.app */;
@@ -370,7 +431,7 @@
 			);
 			mainGroup = E32EF6A4256CF0D9007138B6;
 			packageReferences = (
-				E372626C25A0986E00F0A8DA /* XCRemoteSwiftPackageReference "realm-cocoa" */,
+				E36FF9E12653F27800E45AED /* XCRemoteSwiftPackageReference "realm-cocoa" */,
 			);
 			productRefGroup = E32EF6AE256CF0D9007138B6 /* Products */;
 			projectDirPath = "";
@@ -445,9 +506,10 @@
 				E32EF6F7256CF22A007138B6 /* ContentView.swift in Sources */,
 				E383AF0825DEFAD70051C78F /* AddFundView.swift in Sources */,
 				E31F918A25DD5AC500A9C383 /* FundViewAction.swift in Sources */,
+				E3D26D7F25E56DB600F560E5 /* BudgetCardView.swift in Sources */,
+				E3B75D2625E99ED3009D98A6 /* GeneralLibrary.swift in Sources */,
 				E32EF6F2256CF22A007138B6 /* Transaction.swift in Sources */,
 				E397D79D2570E579009222D1 /* TextFieldModifier.swift in Sources */,
-				E34C5F29257D1CEA00311A75 /* Authenticator.swift in Sources */,
 				E32EF6F8256CF22A007138B6 /* ObservableRealmCollection.swift in Sources */,
 				E32EF6F9256CF22A007138B6 /* Extensions.swift in Sources */,
 				E31D496E25DD3C7A00A51358 /* FundCardView.swift in Sources */,
@@ -455,13 +517,18 @@
 				E31D496925DD3BAF00A51358 /* SavingsView.swift in Sources */,
 				E32EF6F4256CF22A007138B6 /* TransactionCardView.swift in Sources */,
 				E32EF6F6256CF22A007138B6 /* TransactionListView.swift in Sources */,
-				E32EF6FB256CF22A007138B6 /* HomeView.swift in Sources */,
+				E3C1635A25E56503000D2BA5 /* BudgetView.swift in Sources */,
+				E32EF6FB256CF22A007138B6 /* BudgetsView.swift in Sources */,
 				E397D7902570E514009222D1 /* LoginView.swift in Sources */,
+				E30420B525E6B8C800ED0C65 /* CustomDatePickerView.swift in Sources */,
 				E3FE886E25A237DF00CC3856 /* TransactionFilterView.swift in Sources */,
 				E372878E25A4DFFE007AA92F /* TransactionFilter.swift in Sources */,
+				E3A5BC0C25FFE1040033FE69 /* TagCloudView.swift in Sources */,
 				E3BEB61D25E0F94B00B36012 /* EditFundView.swift in Sources */,
 				E32EF6FA256CF22A007138B6 /* SettingsView.swift in Sources */,
+				E3C1635425E553AD000D2BA5 /* Budget.swift in Sources */,
 				E3BEB61525E0253700B36012 /* PickerOptionsView.swift in Sources */,
+				E325B3F725F7C7CA0002D43D /* OverviewView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -469,7 +536,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E32EF6C3256CF0DE007138B6 /* BudgetTests.swift in Sources */,
+				E384C79D2652ACA80085C9AE /* TransactionTests.swift in Sources */,
+				E32EF6C3256CF0DE007138B6 /* ResetTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -619,7 +687,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_ASSET_PATHS = "\"Budget/Preview Content\"";
 				DEVELOPMENT_TEAM = B436S7J3T5;
 				ENABLE_PREVIEWS = YES;
@@ -633,6 +702,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.eliseyozerov.Budget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = Budget_Development;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -644,7 +714,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_ASSET_PATHS = "\"Budget/Preview Content\"";
 				DEVELOPMENT_TEAM = B436S7J3T5;
 				ENABLE_PREVIEWS = YES;
@@ -658,6 +729,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.eliseyozerov.Budget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = Budget_Distribution;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -789,25 +861,25 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		E372626C25A0986E00F0A8DA /* XCRemoteSwiftPackageReference "realm-cocoa" */ = {
+		E36FF9E12653F27800E45AED /* XCRemoteSwiftPackageReference "realm-cocoa" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/realm/realm-cocoa";
+			repositoryURL = "https://github.com/realm/realm-cocoa.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 10.5.0;
+				minimumVersion = 10.7.6;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		E372626D25A0986E00F0A8DA /* Realm */ = {
+		E36FF9E22653F27800E45AED /* Realm */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = E372626C25A0986E00F0A8DA /* XCRemoteSwiftPackageReference "realm-cocoa" */;
+			package = E36FF9E12653F27800E45AED /* XCRemoteSwiftPackageReference "realm-cocoa" */;
 			productName = Realm;
 		};
-		E372626F25A0986E00F0A8DA /* RealmSwift */ = {
+		E36FF9E42653F27800E45AED /* RealmSwift */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = E372626C25A0986E00F0A8DA /* XCRemoteSwiftPackageReference "realm-cocoa" */;
+			package = E36FF9E12653F27800E45AED /* XCRemoteSwiftPackageReference "realm-cocoa" */;
 			productName = RealmSwift;
 		};
 /* End XCSwiftPackageProductDependency section */

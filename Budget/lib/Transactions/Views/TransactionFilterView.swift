@@ -12,15 +12,22 @@ struct TransactionFilterView: View {
     //MARK: - Misc
     
     let dateFormatter = DateFormatter()
+    @ObservedObject var filter: TransactionFilter
     
-    init(sheetView: Binding<SheetView?>) {
+    init(sheetView: Binding<SheetView?>, filter: TransactionFilter) {
         self._sheetView = sheetView
+        self.filter = filter
+        if let from = filter.totalFrom?.toCurrencyString() {
+            self._totalFromString = State(initialValue: from)
+        }
+        if let to = filter.totalTo?.toCurrencyString() {
+            self._totalToString = State(initialValue: to)
+        }
         dateFormatter.dateFormat = "dd.MM.yyyy"
     }
     
     //MARK: - State fields
     
-    @EnvironmentObject var filter: TransactionFilter
     @Binding var sheetView: SheetView?
     
     @State var totalFromString: String = ""
@@ -288,7 +295,7 @@ struct TransactionFilterView: View {
 
 struct TransactionFilterView_Previews: PreviewProvider {
     static var previews: some View {
-        TransactionFilterView(sheetView: .constant(.add))
+        TransactionFilterView(sheetView: .constant(.add), filter: TransactionFilter())
             .environmentObject(TransactionFilter())
     }
 }

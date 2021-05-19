@@ -23,22 +23,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "8F446117-A8B9-46FA-A6DA-C05D7699B1BC"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Budget/lib/Transactions/Views/AddTransactionView.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "174"
-            endingLineNumber = "174"
-            landmarkName = "toCurrencyString()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "B7EC328B-70C9-4C70-9FD4-C5A66977CA21"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -53,7 +37,7 @@
             <Locations>
                <Location
                   uuid = "B7EC328B-70C9-4C70-9FD4-C5A66977CA21 - 51fd984b6d5abfec"
-                  shouldBeEnabled = "Yes"
+                  shouldBeEnabled = "No"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
                   symbolName = "closure #1 () -&gt; &lt;&lt;opaque return type of (extension in SwiftUI):SwiftUI.View.toolbar&lt;A where A1: SwiftUI.ToolbarContent&gt;(content: () -&gt; A1) -&gt; some&gt;&gt;.0 in closure #1 (SwiftUI.GeometryProxy) -&gt; SwiftUI.NavigationView&lt;&lt;&lt;opaque return type of (extension in SwiftUI):SwiftUI.View.toolbar&lt;A where A1: SwiftUI.ToolbarContent&gt;(content: () -&gt; A1) -&gt; some&gt;&gt;.0&gt; in Budget.SavingsView.body.getter : some"
@@ -68,7 +52,7 @@
                </Location>
                <Location
                   uuid = "B7EC328B-70C9-4C70-9FD4-C5A66977CA21 - bc0815330db52ede"
-                  shouldBeEnabled = "Yes"
+                  shouldBeEnabled = "No"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
                   symbolName = "closure #1 (Budget.Fund) -&gt; Budget.FundView in closure #1 () -&gt; &lt;&lt;opaque return type of (extension in SwiftUI):SwiftUI.View.toolbar&lt;A where A1: SwiftUI.ToolbarContent&gt;(content: () -&gt; A1) -&gt; some&gt;&gt;.0 in closure #1 (SwiftUI.GeometryProxy) -&gt; SwiftUI.NavigationView&lt;&lt;&lt;opaque return type of (extension in SwiftUI):SwiftUI.View.toolbar&lt;A where A1: SwiftUI.ToolbarContent&gt;(content: () -&gt; A1) -&gt; some&gt;&gt;.0&gt; in Budget.SavingsView.body.getter : some"
@@ -82,6 +66,22 @@
                   offsetFromSymbolStart = "201">
                </Location>
             </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "783F01B0-9840-4070-9FB7-1902892108E2"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Budget/lib/Budget/Views/BudgetsView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "62"
+            endingLineNumber = "62"
+            landmarkName = "addModifyBudget(_:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

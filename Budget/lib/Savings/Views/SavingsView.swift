@@ -85,7 +85,8 @@ class SavingsViewModel: ObservableObject {
 struct SavingsView: View {
     @Environment(\.presentationMode) var presentation
     
-    @ObservedObject var model = SavingsViewModel()
+    @EnvironmentObject var model: SavingsViewModel
+    
     @State var sheetItem: SavingsSheetItem?
     
     func sheetView(_ sheetItem: SavingsSheetItem) -> AnyView {
@@ -105,28 +106,50 @@ struct SavingsView: View {
     var body: some View {
         GeometryReader { geometry in
             NavigationView {
-                List {
-                    ForEach(model.funds) { fund in
-                        Button(action: {sheetItem = .edit(fund)}, label: {
-                            FundCardView(fund: fund, geometry: geometry)
-                        })
-                        .buttonStyle(PlainButtonStyle())
+                if !model.funds.isEmpty {
+                    List {
+                        ForEach(model.funds) { fund in
+                            Button(action: {sheetItem = .edit(fund)}, label: {
+                                FundCardView(fund: fund, geometry: geometry)
+                            })
+                            .buttonStyle(PlainButtonStyle())
+                        }
+                        .onDelete { set in
+                            model.deleteFund(model.funds[set.first!])
+                        }
                     }
-                    .onDelete { set in
-                        model.deleteFund(model.funds[set.first!])
+                    .listStyle(InsetGroupedListStyle())
+                    .navigationTitle("Savings")
+                    .toolbar {
+                        ToolbarItem(placement: .navigationBarTrailing) {
+                            Button(action: {sheetItem = .add}, label: {
+                                HStack(spacing: 5) {
+                                    Text("Add goal")
+                                    Image(systemName: "plus")
+                                }
+                            })
+                        }
                     }
-                }
-                .listStyle(InsetGroupedListStyle())
-                .navigationTitle("Savings")
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Button(action: {sheetItem = .add}, label: {
-                            HStack(spacing: 5) {
-                                Text("Add goal")
-                                Image(systemName: "plus")
-                            }
-                        })
+                } else {
+                    ZStack {
+                        Color(UIColor.systemGroupedBackground)
+                        Text("Nothing to see here yet!")
+                            .font(.headline)
+                            .foregroundColor(.gray)
+                            .fontWeight(.bold)
                     }
+                    .navigationTitle("Savings")
+                    .toolbar {
+                        ToolbarItem(placement: .navigationBarTrailing) {
+                            Button(action: {sheetItem = .add}, label: {
+                                HStack(spacing: 5) {
+                                    Text("Add goal")
+                                    Image(systemName: "plus")
+                                }
+                            })
+                        }
+                    }
+                    
                 }
             }
             .sheet(item: $sheetItem) { sheetView($0) }
