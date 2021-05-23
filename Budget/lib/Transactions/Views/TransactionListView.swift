@@ -56,10 +56,19 @@ class TransactionsViewModel: ObservableObject {
         }
     }
     
-    func getTotal(category: String, from: Date, to: Date = Date()) -> Double {
+    func getTotal(category: String, from: Date, to: Date = Date(), type: TransactionType? = nil) -> Double {
         if let results = self.results {
             let list = results.filter({$0.category == category && $0.date.between(start: from, end: to)})
-            return list.reduce(0) { $0 + $1.totalSigned }
+            return list.reduce(0) { base, element in
+                guard let _type = type else {
+                    return base + element.totalSigned
+                }
+                if _type == element.type {
+                    return base + element.totalSigned
+                } else {
+                    return 0
+                }
+            }
         }
         return 0
     }

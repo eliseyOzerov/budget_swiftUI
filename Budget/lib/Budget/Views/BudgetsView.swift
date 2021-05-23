@@ -11,6 +11,7 @@ import RealmSwift
 
 class BudgetsViewModel: ObservableObject {
     @Published var budgets: [Budget] = []
+    @Published var editedBudget: Budget?
     
     private var results: Results<BudgetDB>?
     private var token: NotificationToken?
@@ -21,7 +22,11 @@ class BudgetsViewModel: ObservableObject {
         token = results?.observe { [self] changes in
             switch changes {
             case .initial(let results):
-                budgets = results.map({Budget(from: $0)})
+                budgets = results.map({ budgetDB in
+                    var budget = Budget(from: budgetDB)
+                    getAutosaveFund(&budget)
+                    return budget
+                })
             case .error(let error):
                 debugPrint(error)
             case .update(_,let deletions,let insertions,let modifications):
@@ -38,11 +43,23 @@ class BudgetsViewModel: ObservableObject {
         }
     }
     
+    func resetBudget(_ budget: Budget, spent: Double) {
+        if shouldResetBudget(budget) {
+            budget.budget = budget.budget - spent
+            budget.lastReset = Date()
+        }
+    }
+    
+    func shouldResetBudget(_ budget: Budget) -> Bool {
+        return budget.nextReset.startOfDay().equal(Date().startOfDay()) && !budget.lastReset.startOfDay().equal(Date().startOfDay())
+    }
+    
     func addModifyBudget(_ budget: Budget) {
         do {
             let realm = try Realm()
             try realm.write {
-                realm.add(BudgetDB(from: budget), update: .modified)
+                let _budget = BudgetDB(from: budget)
+                realm.add(_budget, update: .modified)
             }
         } catch {
             debugPrint(error)
@@ -55,6 +72,20 @@ class BudgetsViewModel: ObservableObject {
             try realm.write {
                 let obj = results?.filter({$0.id == fnd.id})
                 realm.delete(obj!)
+            }
+        } catch {
+            debugPrint(error)
+        }
+    }
+    
+    func getAutosaveFund(_ fnd: inout Budget) {
+        do {
+            let realm = try Realm()
+            if let key = fnd.autosaveTo {
+                let fundDB = realm.object(ofType: FundDB.self, forPrimaryKey: key)
+                if let fundDB = fundDB {
+                    fnd.autosaveTo = Fund(from: fundDB)
+                }
             }
         } catch {
             debugPrint(error)
@@ -75,54 +106,108 @@ class BudgetsViewModel: ObservableObject {
     
 }
 
+enum BudgetsSheetItem: Hashable, Identifiable {
+    case add
+    case edit(Budget)
+    
+    var id: Self { self }
+}
+
 struct BudgetsView: View {
     @Environment(\.presentationMode) var presentation
     
-    @ObservedObject var model = BudgetsViewModel()
-    @State var sheetItem: SavingsSheetItem?
+    @EnvironmentObject var savingsModel: SavingsViewModel
+    @EnvironmentObject var transactionsModel: TransactionsViewModel
     
-    func sheetView(_ sheetItem: SavingsSheetItem) -> AnyView {
-        switch sheetItem {
-        case .add: return AnyView(
-            AddFundView(model: model)
-        )
-        case .edit(let fund): return AnyView(
-            FundViewAction(
-                model: model,
-                fund: fund
-            )
-        )
+    @ObservedObject var model = BudgetsViewModel()
+    @State var budget = Budget()
+    
+    @State var showSheet: Bool = false
+    
+    init() {
+        resetAllBudgets(model.budgets)
+    }
+    
+    public func resetAllBudgets(_ budgets: [Budget]) -> Void {
+        budgets.forEach { budget in
+            model.resetBudget(budget, spent: spent(budget: budget))
         }
+    }
+    
+    func spent(budget: Budget) -> Double {
+        return abs(transactionsModel.getTotal(category: budget.title, from: budget.lastReset, type: .expense))
+    }
+    
+    var unallocated: Double {
+        max(0, transactionsModel.balance -
+            model.budgets.reduce(0) { $0 + $1.budget } -
+            savingsModel.funds.reduce(0) {$0 + $1.current})
     }
     
     var body: some View {
         GeometryReader { geometry in
             NavigationView {
-                List {
-                    ForEach(model.funds) { fund in
-                        Button(action: {sheetItem = .edit(fund)}, label: {
-                            FundCardView(fund: fund, geometry: geometry)
-                        })
-                        .buttonStyle(PlainButtonStyle())
+                VStack(spacing: 0) {
+                    if unallocated > 0 {
+                        HStack(alignment: .firstTextBaseline) {
+                            Text(unallocated.toCurrencyString())
+                                .font(.footnote)
+                                .fontWeight(.bold)
+                            Text("unallocated")
+                                .font(.caption)
+                                .foregroundColor(.gray)
+                        }
+                        .padding(.top)
                     }
-                    .onDelete { set in
-                        model.deleteFund(model.funds[set.first!])
+                    if !model.budgets.isEmpty {
+                        List {
+                            ForEach(model.budgets) { budget in
+                                Button(action: {
+                                    self.budget = budget
+                                    model.editedBudget = budget
+                                    showSheet = true
+                                }, label: {
+                                    BudgetCardView(budget: budget, spent: spent(budget: budget))
+                                })
+                                .buttonStyle(PlainButtonStyle())
+                            }
+                            .onDelete { set in
+                                model.deleteBudget(model.budgets[set.first!])
+                            }
+                        }
+                        .listStyle(InsetGroupedListStyle())
+                    } else {
+                        ZStack {
+                            Color(UIColor.systemGroupedBackground)
+                            Text("Nothing to see here yet!")
+                                .font(.headline)
+                                .foregroundColor(.gray)
+                                .fontWeight(.bold)
+                        }
+                        
                     }
+                    
                 }
-                .listStyle(InsetGroupedListStyle())
-                .navigationTitle("Savings")
+                .animation(.easeInOut(duration: 0.15))
+                .navigationBarTitle("Budget")
                 .toolbar {
                     ToolbarItem(placement: .navigationBarTrailing) {
-                        Button(action: {sheetItem = .add}, label: {
+                        Button(action: {
+                            model.editedBudget = nil
+                            showSheet = true
+                        }, label: {
                             HStack(spacing: 5) {
-                                Text("Add goal")
+                                Text("Add")
                                 Image(systemName: "plus")
                             }
                         })
                     }
                 }
+                .background(Color(UIColor.systemGroupedBackground))
             }
-            .sheet(item: $sheetItem) { sheetView($0) }
+            .sheet(isPresented: $showSheet) {
+                BudgetView(model: model, available: unallocated)
+            }
         }
     }
 }
@@ -130,5 +215,6 @@ struct BudgetsView: View {
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
         BudgetsView()
+            .environmentObject(SavingsViewModel())
     }
 }
