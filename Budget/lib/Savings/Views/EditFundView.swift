@@ -11,14 +11,13 @@ struct EditFundView: View {
     @Environment(\.presentationMode) var presentation
     @Binding var isPresented: Bool
 
-    @ObservedObject var model: SavingsViewModel
+    @ObservedObject var model = SavingsViewModel.shared
     @ObservedObject var fund: Fund
     
     @State var title: String = ""
     @State var goalString: String = ""
 
-    init(model: SavingsViewModel, fund: Fund, isPresented: Binding<Bool>) {
-        self.model = model
+    init(fund: Fund, isPresented: Binding<Bool>) {
         self.fund = fund
         self._goalString = State(initialValue: fund.goal.toCurrencyString())
         self._title = State(initialValue: fund.title)
@@ -75,8 +74,7 @@ struct EditFundView: View {
                         Fund(
                             id: fund.id,
                             title: title,
-                            goal: goalString.toDouble(),
-                            current: fund.current
+                            goal: goalString.toDouble()
                         )
                     )
                     presentation.wrappedValue.dismiss()
@@ -91,6 +89,6 @@ struct EditFundView: View {
 
 struct EditFundView_Previews: PreviewProvider {
     static var previews: some View {
-        EditFundView(model: SavingsViewModel(), fund: Fund(), isPresented: .constant(true))
+        EditFundView(fund: Fund(), isPresented: .constant(true))
     }
 }

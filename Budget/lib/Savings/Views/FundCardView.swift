@@ -9,9 +9,8 @@ import SwiftUI
 
 struct FundCardView: View {
     var fund: Fund
+    var saved: Double
     var geometry: GeometryProxy
-    
-    
     
     var body: some View {
         VStack(alignment: .leading, spacing: 15) {
@@ -19,10 +18,10 @@ struct FundCardView: View {
                 Text(fund.title)
                     .font(.headline)
                 Spacer()
-                Text("\(fund.current.toCurrencyString()) / \(fund.goal.toCurrencyString())")
+                Text("\(saved.toCurrencyString()) / \(fund.goal.toCurrencyString())")
                     .font(.caption)
             }
-            ProgressView(value: min(fund.current, fund.goal), total: fund.goal)
+            ProgressView(value: min(saved, fund.goal), total: fund.goal)
                 .progressViewStyle(ProgressBarStyle())
         }
         .padding(.vertical, 8)
@@ -47,7 +46,7 @@ struct ProgressBarStyle: ProgressViewStyle {
 struct FundCardView_Previews: PreviewProvider {
     static var previews: some View {
         GeometryReader { geometry in
-            FundCardView(fund: Fund(), geometry: geometry)
+            FundCardView(fund: Fund(), saved: 100.0, geometry: geometry)
         }
         
     }

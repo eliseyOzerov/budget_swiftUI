@@ -27,8 +27,8 @@ enum Weekday: String, Titled, CaseIterable, Identifiable, RealmOptionalType {
 struct BudgetView: View {
     @Environment(\.presentationMode) var presentation
     
-    @ObservedObject var model: BudgetsViewModel
-    @EnvironmentObject var savingsModel: SavingsViewModel
+    @ObservedObject var model = BudgetsViewModel.shared
+    @ObservedObject var savingsModel = SavingsViewModel.shared
     
     var id: ObjectId?
     @State var title: String = ""
@@ -478,7 +478,6 @@ struct AutosaveView: View {
 
 struct AddBudgetView_Previews: PreviewProvider {
     static var previews: some View {
-        BudgetView(model: BudgetsViewModel(), available: 200)
-            .environmentObject(SavingsViewModel())
+        BudgetView(model: BudgetsViewModel.shared, available: 200)
     }
 }

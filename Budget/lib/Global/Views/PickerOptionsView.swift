@@ -48,8 +48,8 @@ struct PickerOptionsView<T>: View where T: Titled, T: Identifiable {
 }
 
 struct PickerOptionsView_Previews: PreviewProvider {
-    static let arr = [Fund(title: "Somethign", goal: 2000, current: 10),
-    Fund(title: "Else", goal: 100, current: 1)]
+    static let arr = [Fund(title: "Somethign", goal: 2000),
+    Fund(title: "Else", goal: 100)]
     
     static var previews: some View {
         PickerOptionsView(options: arr, selection: .constant(arr[1]))

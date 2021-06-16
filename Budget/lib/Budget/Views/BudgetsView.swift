@@ -16,7 +16,8 @@ class BudgetsViewModel: ObservableObject {
     private var results: Results<BudgetDB>?
     private var token: NotificationToken?
     
-    init() {
+    static var shared = BudgetsViewModel()
+    private init() {
         let realm = try! Realm()
         results = realm.objects(BudgetDB.self)
         token = results?.observe { [self] changes in
@@ -43,10 +44,27 @@ class BudgetsViewModel: ObservableObject {
         }
     }
     
-    func resetBudget(_ budget: Budget, spent: Double) {
+    func resetBudget(_ budget: Budget, spent: Double, trxModel: TransactionsViewModel) {
         if shouldResetBudget(budget) {
-            budget.budget = budget.budget - spent
+            let leftovers = budget.budget - spent
             budget.lastReset = Date()
+            
+            if budget.shouldAutosave {
+                if let fund = budget.autosaveTo {
+                    trxModel.addModifyTx(
+                        Transaction(
+                            date: Date(),
+                            total: leftovers,
+                            type: .transfer,
+                            category: "Transfer",
+                            secondParty: "\(budget.title) -> \(fund.title)"
+                        )
+                    )
+                    budget.budget = 0
+                }
+            } else {
+                budget.budget = leftovers
+            }
         }
     }
     
@@ -116,10 +134,10 @@ enum BudgetsSheetItem: Hashable, Identifiable {
 struct BudgetsView: View {
     @Environment(\.presentationMode) var presentation
     
-    @EnvironmentObject var savingsModel: SavingsViewModel
-    @EnvironmentObject var transactionsModel: TransactionsViewModel
+    @ObservedObject var transactionsModel = TransactionsViewModel.shared
+    @ObservedObject var savingsModel = SavingsViewModel.shared
+    @ObservedObject var model = BudgetsViewModel.shared
     
-    @ObservedObject var model = BudgetsViewModel()
     @State var budget = Budget()
     
     @State var showSheet: Bool = false
@@ -130,7 +148,7 @@ struct BudgetsView: View {
     
     public func resetAllBudgets(_ budgets: [Budget]) -> Void {
         budgets.forEach { budget in
-            model.resetBudget(budget, spent: spent(budget: budget))
+            model.resetBudget(budget, spent: spent(budget: budget), trxModel: transactionsModel)
         }
     }
     
@@ -140,8 +158,7 @@ struct BudgetsView: View {
     
     var unallocated: Double {
         max(0, transactionsModel.balance -
-            model.budgets.reduce(0) { $0 + $1.budget } -
-            savingsModel.funds.reduce(0) {$0 + $1.current})
+            model.budgets.reduce(0) { $0 + max(0, $1.budget) }) // max used bcs if budget is negative, it can't count towards unallocated/available funds
     }
     
     var body: some View {
@@ -215,6 +232,5 @@ struct BudgetsView: View {
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
         BudgetsView()
-            .environmentObject(SavingsViewModel())
     }
 }

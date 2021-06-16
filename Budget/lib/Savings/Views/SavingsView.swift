@@ -21,7 +21,9 @@ class SavingsViewModel: ObservableObject {
     private var results: Results<FundDB>?
     private var token: NotificationToken?
     
-    init() {
+    static var shared = SavingsViewModel()
+    
+    private init() {
         let realm = try! Realm()
         results = realm.objects(FundDB.self)
         print("Realm is located at: \(realm.configuration.fileURL!)")
@@ -85,7 +87,8 @@ class SavingsViewModel: ObservableObject {
 struct SavingsView: View {
     @Environment(\.presentationMode) var presentation
     
-    @EnvironmentObject var model: SavingsViewModel
+    @ObservedObject var model = SavingsViewModel.shared
+    @ObservedObject var transactionsModel = TransactionsViewModel.shared
     
     @State var sheetItem: SavingsSheetItem?
     
@@ -97,7 +100,8 @@ struct SavingsView: View {
         case .edit(let fund): return AnyView(
             FundViewAction(
                 model: model,
-                fund: fund
+                fund: fund,
+                saved: transactionsModel.getSavedTotal(fund)
             )
         )
         }
@@ -110,7 +114,7 @@ struct SavingsView: View {
                     List {
                         ForEach(model.funds) { fund in
                             Button(action: {sheetItem = .edit(fund)}, label: {
-                                FundCardView(fund: fund, geometry: geometry)
+                                FundCardView(fund: fund, saved: transactionsModel.getSavedTotal(fund), geometry: geometry)
                             })
                             .buttonStyle(PlainButtonStyle())
                         }
@@ -130,6 +134,7 @@ struct SavingsView: View {
                             })
                         }
                     }
+                    .background(Color(UIColor.systemGroupedBackground))
                 } else {
                     ZStack {
                         Color(UIColor.systemGroupedBackground)

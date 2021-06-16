@@ -11,14 +11,10 @@ import RealmSwift
 struct AddFundView: View {
     @Environment(\.presentationMode) var presentation
     
-    @ObservedObject var model: SavingsViewModel
+    @ObservedObject var model = SavingsViewModel.shared
     @State var title: String = ""
     @State var goalString: String = ""
     @State var currentString: String = 0.0.toCurrencyString()
-    
-    init(model: SavingsViewModel) {
-        self.model = model
-    }
     
     var goalBinding: Binding<String> {
         Binding(
@@ -93,8 +89,7 @@ struct AddFundView: View {
                         model.addModifyFund(
                             Fund(
                                 title: title,
-                                goal: goalString.toDouble(),
-                                current: currentString.toDouble()
+                                goal: goalString.toDouble()
                             )
                         )
                         presentation.wrappedValue.dismiss()
@@ -116,6 +111,6 @@ struct BoldButtonStyle: ButtonStyle {
 
 struct FundViewEdit_Previews: PreviewProvider {
     static var previews: some View {
-        AddFundView(model: SavingsViewModel())
+        AddFundView(model: SavingsViewModel.shared)
     }
 }
