@@ -10,6 +10,7 @@ import SwiftUI
 import RealmSwift
 
 struct TransactionView: View {
+    @Environment(\.presentationMode) var presentation
     
     @State var type = TransactionType.expense
     @State var sumString = ""
@@ -18,6 +19,7 @@ struct TransactionView: View {
     @State var date = Date()
     
     @State var showErrors = false
+    @State var showTypePicker = false
     
     private var id: ObjectId?
     
@@ -70,59 +72,17 @@ struct TransactionView: View {
             }
         )
         return NavigationView {
-            Form {
-                Section {
-                    Picker("Type", selection: $type) {
-                        Text("Expense").tag(TransactionType.expense)
-                        Text("Income").tag(TransactionType.income)
-                    }
-                }
-                Section {
-                    HStack {
-                        VStack(alignment: .leading) {
-                            TextField("Category", text: $category)
-                            if category.isEmpty && showErrors {
-                                Text("Required")
-                                    .font(.caption)
-                                    .foregroundColor(.red)
-                            }
-                        }
-                        Spacer()
-                        VStack(alignment: .trailing) {
-                            TextField(0.0.toCurrencyString(), text: sumBinding)
-                                .keyboardType(.numberPad)
-                                .multilineTextAlignment(.trailing)
-                            if sum == 0 && showErrors {
-                                Text("Required")
-                                    .font(.caption)
-                                    .foregroundColor(.red)
-                            }
-                        }
-                    }
-                    VStack(alignment: .leading) {
-                        TextField("Company", text: $source)
-                        if source.isEmpty && showErrors {
-                            Text("Required")
-                                .font(.caption)
-                                .foregroundColor(.red)
-                        }
-                    }
-                }
-                Section {
-                    DatePicker(selection: $date){
-                        Text("Time")
-                    }
-                }
-            }
-            .navigationTitle(Text("\(id != nil ? "Edit" : "New") transaction"))
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button(action: onCancel, label: {
+            VStack(spacing: 0) {
+                HStack {
+                    Button(action: {
+                        presentation.wrappedValue.dismiss()
+                    }, label: {
                         Text("Cancel")
                     })
-                }
-                ToolbarItem(placement: .navigationBarTrailing) {
+                    Spacer()
+                    Text("\(id != nil ? "Edit" : "New") transaction")
+                        .font(.headline)
+                    Spacer()
                     Button(action: {
                         if sum == 0 ||
                             category.isEmpty ||
@@ -148,6 +108,102 @@ struct TransactionView: View {
                         Text(id != nil ? "Done" : "Add")
                     })
                 }
+                .padding()
+                
+                NavigationLink(
+                    destination: PickerOptionsView(
+                        options: TransactionType.values,
+                        selection: $type
+                    ).navigationTitle("").navigationBarTitleDisplayMode(.inline),
+                    isActive: $showTypePicker){
+                    
+                    HStack {
+                        Text("Type")
+                        Spacer()
+                        Text(type.title)
+                            .fontWeight(.medium)
+                            .foregroundColor(Color(UIColor.systemGray2))
+                        Image(systemName: "chevron.right")
+                            .font(.system(size: 13, weight: .bold))
+                            .foregroundColor(Color(UIColor.systemGray4))
+                    }
+                    .contentShape(Rectangle())
+                }
+                .buttonStyle(PlainButtonStyle())
+                .padding(.horizontal)
+                .padding(.vertical, 10)
+                .background(Color("formRow"))
+                .cornerRadius(10)
+                .padding(.horizontal)
+                .padding(.top, 20)
+                
+                
+                VStack(spacing: 0) {
+                    HStack {
+                        VStack(alignment: .leading) {
+                            TextField("Category", text: $category)
+                            if category.isEmpty && showErrors {
+                                Text("Required")
+                                    .font(.caption)
+                                    .foregroundColor(.red)
+                            }
+                        }
+                        Spacer()
+                        VStack(alignment: .trailing) {
+                            TextField(0.0.toCurrencyString(), text: sumBinding)
+                                .keyboardType(.numberPad)
+                                .multilineTextAlignment(.trailing)
+                            if sum == 0 && showErrors {
+                                Text("Required")
+                                    .font(.caption)
+                                    .foregroundColor(.red)
+                            }
+                        }
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                    .padding(.horizontal)
+                    .padding(.vertical, 10)
+                    
+                    Rectangle()
+                        .frame(height:0.3)
+                        .foregroundColor(Color(UIColor.separator))
+                        .padding(.leading)
+                    
+                    VStack(alignment: .leading) {
+                        TextField("Company", text: $source)
+                        if source.isEmpty && showErrors {
+                            Text("Required")
+                                .font(.caption)
+                                .foregroundColor(.red)
+                        }
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                    .padding(.horizontal)
+                    .padding(.vertical, 10)
+                }
+                .background(Color("formRow"))
+                .cornerRadius(10)
+                .padding(.horizontal)
+                .padding(.vertical, 25)
+                
+                DatePicker(selection: $date){
+                    Text("Time")
+                }
+                .padding(.vertical, 6)
+                .padding(.horizontal)
+                .background(Color("formRow"))
+                .cornerRadius(10)
+                .padding(.horizontal)
+                
+                Spacer()
+            }
+            .background(Color(UIColor.systemGroupedBackground))
+            .edgesIgnoringSafeArea(.bottom)
+            .navigationTitle("")
+            .navigationBarHidden(true)
+            .animation(.easeInOut(duration: 0.3))
+            .onTapGesture {
+                self.hideKeyboard()
             }
         }
     }

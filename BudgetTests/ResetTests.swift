@@ -11,7 +11,7 @@ import XCTest
 class BudgetResetTests: XCTestCase {
     
     func test_ShouldResetBudgetLastResetToday() {
-        let model = BudgetsViewModel()
+        let model = BudgetsViewModel.shared
         let weekday = Weekday.allCases[Date().weekday]
         let budget = Budget(id: nil, title: "TestBudget", budget: 1000, enableResets: true, resetPeriod: .weekly, weekday: weekday, shouldAutosave: false, autosaveTo: nil)
         let shouldReset = model.shouldResetBudget(budget)
@@ -19,7 +19,7 @@ class BudgetResetTests: XCTestCase {
     }
     
     func test_ShouldResetBudgetLastResetEarlier() {
-        let model = BudgetsViewModel()
+        let model = BudgetsViewModel.shared
         let weekday = Weekday.allCases[Date().weekday]
         let lastReset = Date().subtract(component: .day, value: 7)
         let budget = Budget(id: nil, title: "TestBudget", budget: 1000, enableResets: true, resetPeriod: .weekly, weekday: weekday, lastReset: lastReset, shouldAutosave: false, autosaveTo: nil)

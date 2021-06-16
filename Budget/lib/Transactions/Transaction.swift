@@ -9,12 +9,27 @@
 import Foundation
 import RealmSwift
 
-@objc enum TransactionType: Int, RealmEnum {
+@objc enum TransactionType: Int, RealmEnum, Identifiable, Titled {
     case income
     case expense
     case deposit
     case withdrawal
     case transfer
+    
+    var title: String {
+        switch self {
+        case .income: return "Income"
+        case .expense: return "Expense"
+        default: return "Expense"
+        }
+    }
+    
+    static var values: [TransactionType] {
+        [.income,
+         .expense]
+    }
+    
+    var id: Self { self }
 }
 
 class Transaction: Hashable, Identifiable {

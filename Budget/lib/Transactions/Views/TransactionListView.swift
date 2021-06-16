@@ -28,13 +28,16 @@ struct TransactionSection: Identifiable {
 }
 
 class TransactionsViewModel: ObservableObject {
+    
+    static var shared = TransactionsViewModel()
+    
     @Published var sections: [TransactionSection] = []
     @Published var balance: Double = 0
     
     private var results: Results<TransactionDB>?
     private var token: NotificationToken?
     
-    init() {
+    private init() {
         results = try! Realm().objects(TransactionDB.self).sorted(byKeyPath: "date", ascending: false)
         token = results?.observe { [self] changes in
             switch changes {
@@ -67,6 +70,30 @@ class TransactionsViewModel: ObservableObject {
                     return base + element.totalSigned
                 } else {
                     return 0
+                }
+            }
+        }
+        return 0
+    }
+    
+    func getSavedTotal(_ fnd: Fund) -> Double {
+        if let results = self.results {
+            let list = results.filter({($0.type == .withdrawal || $0.type == .deposit || $0.type == .transfer) && $0.secondParty.contains(fnd.title)})
+            return list.reduce(0) { base, element in
+                switch element.type {
+                case .withdrawal:
+                    return base - element.total
+                case .deposit:
+                    return base + element.total
+                case .transfer:
+                    let indexOfFund = element.secondParty.index(of: fnd.title)
+                    let indexOfDirection = element.secondParty.index(of: "->")
+                    if indexOfFund! < indexOfDirection! {
+                        return base - element.total
+                    } else {
+                        return base + element.total
+                    }
+                default: return base
                 }
             }
         }
@@ -205,7 +232,7 @@ struct TransactionListView: View {
     
     @Environment(\.presentationMode) var presentation
     
-    @ObservedObject var model = TransactionsViewModel()
+    @ObservedObject var model = TransactionsViewModel.shared
     @ObservedObject var filter = TransactionFilter()
     
     @State var sheetView: SheetView?
@@ -256,10 +283,13 @@ struct TransactionListView: View {
                                 }).buttonStyle(PlainButtonStyle())
                             }
                             .onDelete { set in
-                                // async because otherwise section is deleted immediately and the animation
-                                // for the row deletion jumps to the top of the list
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
-                                    model.deleteTx(section.transactions[set.first!])
+                                let trx = section.transactions[set.first!]
+                                if trx.type == .deposit {
+                                    // async because otherwise section is deleted immediately and the animation
+                                    // for the row deletion jumps to the top of the list
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
+                                        model.deleteTx(section.transactions[set.first!])
+                                    }
                                 }
                             }
                         }

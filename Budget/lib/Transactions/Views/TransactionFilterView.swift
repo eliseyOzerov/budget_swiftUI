@@ -167,7 +167,7 @@ struct TransactionFilterView: View {
                 return filter.category ?? ""
             },
             set: {
-                filter.category = $0
+                filter.category = $0.isEmpty ? nil : $0
             }
         )
     }
@@ -178,7 +178,7 @@ struct TransactionFilterView: View {
                 return filter.otherParty ?? ""
             },
             set: {
-                filter.otherParty = $0
+                filter.otherParty = $0.isEmpty ? nil : $0
             }
         )
     }
@@ -296,6 +296,5 @@ struct TransactionFilterView: View {
 struct TransactionFilterView_Previews: PreviewProvider {
     static var previews: some View {
         TransactionFilterView(sheetView: .constant(.add), filter: TransactionFilter())
-            .environmentObject(TransactionFilter())
     }
 }
