@@ -278,20 +278,24 @@ struct TransactionListView: View {
                             Text(section.total.toCurrencyString())
                         }) {
                             ForEach(section.transactions.filter({$0.fits(filter)})) { transaction in
-                                Button(action: {sheetView = .edit(transaction)}, label: {
+                                Button(action: {
+                                    // user shouldn't be able to edit the transaction because it messes up savings & budgets etc
+//                                    sheetView = .edit(transaction)
+                                }, label: {
                                     TransactionCardView(transaction: transaction)
                                 }).buttonStyle(PlainButtonStyle())
                             }
-                            .onDelete { set in
-                                let trx = section.transactions[set.first!]
-                                if trx.type == .deposit {
-                                    // async because otherwise section is deleted immediately and the animation
-                                    // for the row deletion jumps to the top of the list
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
-                                        model.deleteTx(section.transactions[set.first!])
-                                    }
-                                }
-                            }
+                            // user shouldn't be able to delete txs since it messes up their budgets/savings
+                            // maybe a confirmation popup before committing the tx or undo afterwards would be nice
+//                            .onDelete { set in
+//                                // async because otherwise section is deleted immediately and the animation
+//                                // for the row deletion jumps to the top of the list
+////                                let trx = section.transactions[set.first!]
+////                                if trx.type == .deposit {}
+//                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
+//                                    model.deleteTx(section.transactions[set.first!])
+//                                }
+//                            }
                         }
                     }
                 }
