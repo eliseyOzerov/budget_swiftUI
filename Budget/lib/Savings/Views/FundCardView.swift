@@ -36,7 +36,7 @@ struct ProgressBarStyle: ProgressViewStyle {
                 .foregroundColor(Color(UIColor.systemGroupedBackground))
             Rectangle()
                 .foregroundColor(.green)
-                .scaleEffect(x: CGFloat(configuration.fractionCompleted!), y: 1.0, anchor: .leading)
+                .scaleEffect(x: CGFloat(configuration.fractionCompleted ?? 0), y: 1.0, anchor: .leading)
         }
         .frame(height: 10)
         .cornerRadius(7)
