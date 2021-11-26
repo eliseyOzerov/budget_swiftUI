@@ -56,6 +56,10 @@ struct MainView: View {
 //        Realm.Configuration.defaultConfiguration = config
 //    }
     
+    init() {
+        UITabBar.appearance().backgroundColor = UIColor.systemGroupedBackground
+    }
+    
     var body: some View {
         TabView {
 //            OverviewView()
