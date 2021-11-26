@@ -25,7 +25,7 @@ enum Weekday: String, Titled, CaseIterable, Identifiable, RealmOptionalType {
 }
 
 struct BudgetView: View {
-    @Environment(\.presentationMode) var presentation
+    @Environment(\.presentationMode) @Binding var presentation
     
     @ObservedObject var model = BudgetsViewModel.shared
     @ObservedObject var savingsModel = SavingsViewModel.shared
@@ -113,11 +113,11 @@ struct BudgetView: View {
     
     var body: some View {
         NavigationView {
-            ZStack {
+           ZStack {
                 VStack {
                     HStack {
                         Button(action: {
-                            presentation.wrappedValue.dismiss()
+                            presentation.dismiss()
                         }, label: {
                             Text("Cancel")
                         })
@@ -141,7 +141,7 @@ struct BudgetView: View {
                                 )
                             )
                             model.editedBudget = nil
-                            presentation.wrappedValue.dismiss()
+                            presentation.dismiss()
                         }, label: {
                             Text("\(model.editedBudget != nil ? "Save" : "Add")")
                         })
@@ -229,15 +229,15 @@ struct BudgetView: View {
 
                     Spacer()
                 }
-                
+                .animation(.easeInOut(duration: 0.3))
+
                 CustomDatePickerView(selection: resetDateBinding, isShowing: $showMonthPicker, components: components)
-                
+
             }
             .background(Color(UIColor.systemGroupedBackground))
             .edgesIgnoringSafeArea(.bottom)
             .navigationTitle("")
             .navigationBarHidden(true)
-            .animation(.easeInOut(duration: 0.3))
             .onTapGesture {
                 self.hideKeyboard()
             }
@@ -269,7 +269,7 @@ struct ResetsView: View {
 
         switch resetPeriod {
         case .weekly:
-            let todaysWeekdayIndex = today.weekday
+            let todaysWeekdayIndex = today.weekday - 1
             if weekday.index > todaysWeekdayIndex {
                 result = today.add(component: .day, value: weekday.index - todaysWeekdayIndex)
             } else if weekday.index < todaysWeekdayIndex {
@@ -393,7 +393,7 @@ struct ResetsView: View {
         .padding(.top)
 
         HStack {
-            Text("The amount you spend until the reset will be subtracted from the budget.")
+            Text("Your new budget will equal the amount that is left at the reset")
                 .font(.caption)
                 .foregroundColor(.gray)
             Spacer()
