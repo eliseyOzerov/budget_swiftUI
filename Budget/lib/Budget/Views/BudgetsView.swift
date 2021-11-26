@@ -140,7 +140,14 @@ struct BudgetsView: View {
     
     @State var budget = Budget()
     
-    @State var showSheet: Bool = false
+    @State var showSheet = false
+    @State var showAlert = false
+    
+    var enableAdd: Bool {
+        unallocated > 0
+    }
+    
+    @State private var navigationButtonID = UUID()
     
     init() {
         resetAllBudgets(model.budgets)
@@ -209,7 +216,7 @@ struct BudgetsView: View {
                 .navigationBarTitle("Budget")
                 .toolbar {
                     ToolbarItem(placement: .navigationBarTrailing) {
-                        Button(action: {
+                        enableAdd ? AnyView(Button(action: {
                             model.editedBudget = nil
                             showSheet = true
                         }, label: {
@@ -218,9 +225,23 @@ struct BudgetsView: View {
                                 Image(systemName: "plus")
                             }
                         })
+                        .id(UUID())) // without this the button isn't working after the first presentation of the sheet view
+                        // which is weird, because on TransactionListView and SavingsView it works correctly without this modifier
+                        // Might be something to do with the sheet modifier [here it's .sheet(isPresented:) and there it's .sheet(item:)
+                        : AnyView(HStack(spacing: 5) {
+                            Text("Add")
+                            Image(systemName: "plus")
+                        }
+                        .foregroundColor(.gray)
+                        .onTapGesture {
+                            showAlert = true
+                        })
                     }
                 }
                 .background(Color(UIColor.systemGroupedBackground))
+            }
+            .alert(isPresented: $showAlert) {
+                Alert(title: Text("Oops!"), message: Text("Please add some funds to budget first."))
             }
             .sheet(isPresented: $showSheet) {
                 BudgetView(model: model, available: unallocated)
