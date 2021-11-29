@@ -11,6 +11,7 @@ import RealmSwift
 
 struct TransactionView: View {
     @Environment(\.presentationMode) var presentation
+    @ObservedObject var budgetModel = BudgetsViewModel.shared
     
     @State var type = TransactionType.expense
     @State var sumString = ""
@@ -20,6 +21,13 @@ struct TransactionView: View {
     
     @State var showErrors = false
     @State var showTypePicker = false
+    @State var showCategoryError = false
+    
+    var canAdd: Bool {
+        !showErrors && !showCategoryError
+    }
+    
+    @FocusState var categoryFocus: Bool
     
     private var id: ObjectId?
     
@@ -33,6 +41,17 @@ struct TransactionView: View {
         let string = regex.stringByReplacingMatches(in: sumString, range: NSMakeRange(0, sumString.count), withTemplate: "")
         // assuming 2 decimal places for formatted string value
         return (string as NSString).doubleValue / 100
+    }
+    
+    var suggestedCategory: String {
+        let categories = budgetModel.budgets.map { $0.title }
+        let filtered = categories.filter { $0.contains(category) }
+        
+        if !filtered.isEmpty && type == .expense {
+            return filtered.first!
+        } else {
+            return ""
+        }
     }
     
     init(transaction: Transaction? = nil, onDone: @escaping (Transaction) -> Void, onCancel: @escaping () -> Void) {
@@ -107,6 +126,7 @@ struct TransactionView: View {
                     }, label: {
                         Text(id != nil ? "Done" : "Add")
                     })
+                    .disabled(!canAdd)
                 }
                 .padding()
                 
@@ -141,9 +161,33 @@ struct TransactionView: View {
                 VStack(spacing: 0) {
                     HStack {
                         VStack(alignment: .leading) {
-                            TextField("Category", text: $category)
+                            ZStack(alignment: .leading) {
+                                Text(suggestedCategory)
+                                    .foregroundColor(.gray)
+                                TextField("Category", text: $category)
+                                    .disableAutocorrection(true)
+                                    .focused($categoryFocus)
+                                    .onChange(of: categoryFocus) { focused in
+                                        if !focused && !category.isEmpty {
+                                            if suggestedCategory != "" {
+                                                category = suggestedCategory
+                                            } else {
+                                                if type == .expense {
+                                                    showCategoryError = true
+                                                }
+                                            }
+                                        }
+                                    }
+                            }
+                            
                             if category.isEmpty && showErrors {
                                 Text("Required")
+                                    .font(.caption)
+                                    .foregroundColor(.red)
+                            }
+                            
+                            if suggestedCategory.isEmpty && showCategoryError {
+                                Text("Category doesn't exist")
                                     .font(.caption)
                                     .foregroundColor(.red)
                             }
