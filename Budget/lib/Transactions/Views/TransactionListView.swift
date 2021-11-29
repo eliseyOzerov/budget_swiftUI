@@ -269,98 +269,76 @@ struct TransactionListView: View {
     
     var body: some View {
         NavigationView {
-            if !model.sections.isEmpty {
-                List {
-                    ForEach(model.sections.filter({$0.transactions.contains(where: {$0.fits(filter)})})) { section in
-                        Section(header: HStack {
-                            Text(section.transactions.first?.date.format() ?? "")
-                            Spacer()
-                            Text(section.total.toCurrencyString())
-                        }) {
-                            ForEach(section.transactions.filter({$0.fits(filter)})) { transaction in
-                                Button(action: {
-                                    // user shouldn't be able to edit the transaction because it messes up savings & budgets etc
-//                                    sheetView = .edit(transaction)
-                                }, label: {
-                                    TransactionCardView(transaction: transaction)
-                                }).buttonStyle(PlainButtonStyle())
+            Group {
+                if !model.sections.isEmpty {
+                    List {
+                        ForEach(model.sections.filter({$0.transactions.contains(where: {$0.fits(filter)})})) { section in
+                            Section(header: HStack {
+                                Text(section.transactions.first?.date.format() ?? "")
+                                Spacer()
+                                Text(section.total.toCurrencyString())
+                            }) {
+                                ForEach(section.transactions.filter({$0.fits(filter)})) { transaction in
+                                    Button(action: {
+                                        // user shouldn't be able to edit the transaction because it messes up savings & budgets etc
+    //                                    sheetView = .edit(transaction)
+                                    }, label: {
+                                        TransactionCardView(transaction: transaction)
+                                    }).buttonStyle(PlainButtonStyle())
+                                }
+                                // user shouldn't be able to delete txs since it messes up their budgets/savings
+                                // maybe a confirmation popup before committing the tx or undo afterwards would be nice
+    //                            .onDelete { set in
+    //                                // async because otherwise section is deleted immediately and the animation
+    //                                // for the row deletion jumps to the top of the list
+    //                                let trx = section.transactions[set.first!]
+    //                                if trx.type == .deposit {}
+    //                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
+    //                                    model.deleteTx(section.transactions[set.first!])
+    //                                }
+    //                            }
                             }
-                            // user shouldn't be able to delete txs since it messes up their budgets/savings
-                            // maybe a confirmation popup before committing the tx or undo afterwards would be nice
-//                            .onDelete { set in
-//                                // async because otherwise section is deleted immediately and the animation
-//                                // for the row deletion jumps to the top of the list
-////                                let trx = section.transactions[set.first!]
-////                                if trx.type == .deposit {}
-//                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
-//                                    model.deleteTx(section.transactions[set.first!])
-//                                }
-//                            }
                         }
                     }
-                }
-                .listStyle(InsetGroupedListStyle())
-                .navigationTitle("Transactions")
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarTrailing){
-                        Button(action: {
-                                sheetView = .add
-                        }) {
-                            HStack(spacing: 5) {
-                                Text("Add")
-                                Image(systemName: "plus")
-                            }.contentShape(Rectangle())
-                        }
+                    .listStyle(InsetGroupedListStyle())
+                } else {
+                    ZStack {
+                        Color(UIColor.systemGroupedBackground)
+                        Text("Nothing to see here yet!")
+                            .font(.headline)
+                            .foregroundColor(.gray)
+                            .fontWeight(.bold)
                     }
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        Button(action: {
-                                sheetView = .filter
-                        }) {
-                            HStack(spacing: 5) {
-                                Text("Filter")
-                                Image(systemName: "line.horizontal.3.decrease.circle")
-                            }.contentShape(Rectangle())
-                        }
+                    
+                }
+            }
+            .navigationTitle("Transactions")
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing){
+                    Button(action: {
+                            sheetView = .add
+                    }) {
+                        HStack(spacing: 5) {
+                            Text("Add")
+                            Image(systemName: "plus")
+                        }.contentShape(Rectangle())
                     }
+                    .id(UUID())
                 }
-                .sheet(item: $sheetView){
-                    getSheetView($0)
-                }
-            } else {
-                ZStack {
-                    Color(UIColor.systemGroupedBackground)
-                    Text("Nothing to see here yet!")
-                        .font(.headline)
-                        .foregroundColor(.gray)
-                        .fontWeight(.bold)
-                }
-                .navigationTitle("Transactions")
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarTrailing){
-                        Button(action: {
-                                sheetView = .add
-                        }) {
-                            HStack(spacing: 5) {
-                                Text("Add")
-                                Image(systemName: "plus")
-                            }.contentShape(Rectangle())
-                        }
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button(action: {
+                            sheetView = .filter
+                    }) {
+                        HStack(spacing: 5) {
+                            Text("Filter")
+                            Image(systemName: "line.horizontal.3.decrease.circle")
+                        }.contentShape(Rectangle())
                     }
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        Button(action: {
-                                sheetView = .filter
-                        }) {
-                            HStack(spacing: 5) {
-                                Text("Filter")
-                                Image(systemName: "line.horizontal.3.decrease.circle")
-                            }.contentShape(Rectangle())
-                        }
-                    }
+                    .id(UUID())
                 }
-                .sheet(item: $sheetView){
-                    getSheetView($0)
-                }
-                
+            }
+            .sheet(item: $sheetView){
+                getSheetView($0)
             }
         }
     }
