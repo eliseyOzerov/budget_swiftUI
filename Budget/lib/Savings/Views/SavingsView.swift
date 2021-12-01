@@ -110,52 +110,42 @@ struct SavingsView: View {
     var body: some View {
         GeometryReader { geometry in
             NavigationView {
-                if !model.funds.isEmpty {
-                    List {
-                        ForEach(model.funds) { fund in
-                            Button(action: {sheetItem = .edit(fund)}, label: {
-                                FundCardView(fund: fund, saved: transactionsModel.getSavedTotal(fund), geometry: geometry)
-                            })
-                            .buttonStyle(PlainButtonStyle())
+                Group {
+                    if !model.funds.isEmpty {
+                        List {
+                            ForEach(model.funds) { fund in
+                                Button(action: {sheetItem = .edit(fund)}, label: {
+                                    FundCardView(fund: fund, saved: transactionsModel.getSavedTotal(fund), geometry: geometry)
+                                })
+                                .buttonStyle(PlainButtonStyle())
+                            }
+                            .onDelete { set in
+                                model.deleteFund(model.funds[set.first!])
+                            }
                         }
-                        .onDelete { set in
-                            model.deleteFund(model.funds[set.first!])
-                        }
-                    }
-                    .listStyle(InsetGroupedListStyle())
-                    .navigationTitle("Savings")
-                    .toolbar {
-                        ToolbarItem(placement: .navigationBarTrailing) {
-                            Button(action: {sheetItem = .add}, label: {
-                                HStack(spacing: 5) {
-                                    Text("Add goal")
-                                    Image(systemName: "plus")
-                                }
-                            })
-                        }
-                    }
-                    .background(Color(UIColor.systemGroupedBackground))
-                } else {
-                    ZStack {
-                        Color(UIColor.systemGroupedBackground)
-                        Text("Nothing to see here yet!")
-                            .font(.headline)
-                            .foregroundColor(.gray)
-                            .fontWeight(.bold)
-                    }
-                    .navigationTitle("Savings")
-                    .toolbar {
-                        ToolbarItem(placement: .navigationBarTrailing) {
-                            Button(action: {sheetItem = .add}, label: {
-                                HStack(spacing: 5) {
-                                    Text("Add goal")
-                                    Image(systemName: "plus")
-                                }
-                            })
+                        .listStyle(InsetGroupedListStyle())
+                    } else {
+                        ZStack {
+                            Color(UIColor.systemGroupedBackground)
+                            Text("Nothing to see here yet!")
+                                .font(.headline)
+                                .foregroundColor(.gray)
+                                .fontWeight(.bold)
                         }
                     }
-                    
                 }
+                .navigationTitle("Savings")
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button(action: {sheetItem = .add}, label: {
+                            HStack(spacing: 5) {
+                                Text("Add")
+                                Image(systemName: "plus")
+                            }
+                        })
+                    }
+                }
+                .background(Color(UIColor.systemGroupedBackground))
             }
             .sheet(item: $sheetItem) { sheetView($0) }
         }
