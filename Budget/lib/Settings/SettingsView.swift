@@ -1,5 +1,5 @@
 //
-//  WishlistView.swift
+//  SettingsView.swift
 //  Budget
 //
 //  Created by Elisey Ozerov on 15/11/2020.
@@ -8,14 +8,18 @@
 
 import SwiftUI
 
-struct WishlistView: View {
+struct SettingsView: View {
     var body: some View {
-        Text("Wishlist")
+        NavigationView {
+            List {
+                
+            }
+        }
     }
 }
 
-struct WishlistView_Previews: PreviewProvider {
+struct SettingsView_Previews: PreviewProvider {
     static var previews: some View {
-        WishlistView()
+        SettingsView()
     }
 }

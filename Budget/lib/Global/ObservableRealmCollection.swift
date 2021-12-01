@@ -28,9 +28,8 @@ class ObservableRealmCollection<T>: ObservableObject where T: Object, T: Identif
         do {
             let realm = try Realm()
             print("Realm is located at: \(realm.configuration.fileURL!)")
-            results = realm.objects(T.self).sorted(byKeyPath: keypath, ascending: ascending)
-            self.__results = results
-            self.results = results?.freeze()
+            __results = realm.objects(T.self).sorted(byKeyPath: keypath, ascending: ascending)
+            results = __results
             token = self.__results?.observe { changes in
                 switch changes {
                 case .initial(let results):
@@ -40,8 +39,10 @@ class ObservableRealmCollection<T>: ObservableObject where T: Object, T: Identif
                     self.results = nil
                     self.token = nil
                     debugPrint(error)
-                case .update(let results, _, _, _):
-                    self.results = results.freeze()
+                case .update(_, _,_,_):
+//                    self.results = self.__results?.freeze()
+                    self.objectWillChange.send()
+                    print(".update \(String(describing: self.__results?.count))")
                 }
             }
         } catch {
@@ -52,7 +53,7 @@ class ObservableRealmCollection<T>: ObservableObject where T: Object, T: Identif
         }
     }
     
-    func add(object: T, onSuccess: () -> Void, onError: () -> Void) {
+    func add(_ object: T, onSuccess: () -> Void = {}, onError: () -> Void = {}) {
         do {
             let realm = try Realm()
             try realm.write {
@@ -65,12 +66,12 @@ class ObservableRealmCollection<T>: ObservableObject where T: Object, T: Identif
         }
     }
     
-    func delete(object: T, onSuccess: () -> Void, onError: () -> Void) {
+    func delete(at indices: IndexSet, onSuccess: () -> Void = {}, onError: () -> Void = {}) {
         do {
             let realm = try Realm()
             try realm.write {
-                guard let obj = __results?.first(where: { $0.id == object.id }) else { return }
-                realm.delete(obj)
+                guard let objs = __results?.enumerated().filter({indices.contains($0.offset)}).map({$0.element}) else { return }
+                realm.delete(objs)
             }
             onSuccess()
         } catch {
