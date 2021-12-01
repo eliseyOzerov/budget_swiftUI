@@ -10,6 +10,8 @@ import SwiftUI
 import RealmSwift
 
 class BudgetsViewModel: ObservableObject {
+    @ObservedObject var transactionsModel = TransactionsViewModel.shared
+    
     @Published var budgets: [Budget] = []
     @Published var editedBudget: Budget?
     
@@ -17,6 +19,7 @@ class BudgetsViewModel: ObservableObject {
     private var token: NotificationToken?
     
     static var shared = BudgetsViewModel()
+    
     private init() {
         let realm = try! Realm()
         results = realm.objects(BudgetDB.self)
@@ -28,6 +31,7 @@ class BudgetsViewModel: ObservableObject {
                     getAutosaveFund(&budget)
                     return budget
                 })
+                resetAllBudgets()
             case .error(let error):
                 debugPrint(error)
             case .update(_,let deletions,let insertions,let modifications):
@@ -44,14 +48,29 @@ class BudgetsViewModel: ObservableObject {
         }
     }
     
-    func resetBudget(_ budget: Budget, spent: Double, trxModel: TransactionsViewModel) {
+    func spent(budget: Budget) -> Double {
+        return abs(transactionsModel.getTotal(category: budget.title, from: budget.lastReset, type: .expense))
+    }
+    
+    var unallocated: Double {
+        max(0, transactionsModel.balance -
+            budgets.reduce(0) { $0 + max(0, $1.budget) }) // max used bcs if budget is negative, it can't count towards unallocated/available funds
+    }
+    
+    public func resetAllBudgets() -> Void {
+        budgets.forEach { budget in
+            resetBudget(budget, spent: spent(budget: budget))
+        }
+    }
+    
+    func resetBudget(_ budget: Budget, spent: Double) {
         if shouldResetBudget(budget) {
             let leftovers = budget.budget - spent
             budget.lastReset = Date()
             
             if budget.shouldAutosave {
                 if let fund = budget.autosaveTo {
-                    trxModel.addModifyTx(
+                    transactionsModel.addModifyTx(
                         Transaction(
                             date: Date(),
                             total: leftovers,
@@ -144,37 +163,18 @@ struct BudgetsView: View {
     @State var showAlert = false
     
     var enableAdd: Bool {
-        unallocated > 0
+        model.unallocated > 0
     }
     
     @State private var navigationButtonID = UUID()
-    
-    init() {
-        resetAllBudgets(model.budgets)
-    }
-    
-    public func resetAllBudgets(_ budgets: [Budget]) -> Void {
-        budgets.forEach { budget in
-            model.resetBudget(budget, spent: spent(budget: budget), trxModel: transactionsModel)
-        }
-    }
-    
-    func spent(budget: Budget) -> Double {
-        return abs(transactionsModel.getTotal(category: budget.title, from: budget.lastReset, type: .expense))
-    }
-    
-    var unallocated: Double {
-        max(0, transactionsModel.balance -
-            model.budgets.reduce(0) { $0 + max(0, $1.budget) }) // max used bcs if budget is negative, it can't count towards unallocated/available funds
-    }
     
     var body: some View {
         GeometryReader { geometry in
             NavigationView {
                 VStack(spacing: 0) {
-                    if unallocated > 0 {
+                    if model.unallocated > 0 {
                         HStack(alignment: .firstTextBaseline) {
-                            Text(unallocated.toCurrencyString())
+                            Text(model.unallocated.toCurrencyString())
                                 .font(.footnote)
                                 .fontWeight(.bold)
                             Text("unallocated")
@@ -191,7 +191,7 @@ struct BudgetsView: View {
                                     model.editedBudget = budget
                                     showSheet = true
                                 }, label: {
-                                    BudgetCardView(budget: budget, spent: spent(budget: budget))
+                                    BudgetCardView(budget: budget, spent: model.spent(budget: budget))
                                 })
                                 .buttonStyle(PlainButtonStyle())
                             }
@@ -244,7 +244,7 @@ struct BudgetsView: View {
                 Alert(title: Text("Oops!"), message: Text("Please add some funds to budget first."))
             }
             .sheet(isPresented: $showSheet) {
-                BudgetView(model: model, available: unallocated)
+                BudgetView(model: model, available: model.unallocated)
             }
         }
     }
