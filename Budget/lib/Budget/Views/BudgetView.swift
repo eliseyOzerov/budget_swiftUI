@@ -140,8 +140,11 @@ struct BudgetView: View {
                                     autosaveTo: autosaveTo // fundBinding not good - force unwrapping
                                 )
                             )
-                            model.editedBudget = nil
                             presentation.dismiss()
+                            // without this you can see the title and action button change before the modal is dismissed
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                model.editedBudget = nil
+                            }
                         }, label: {
                             Text("\(model.editedBudget != nil ? "Save" : "Add")")
                         })
