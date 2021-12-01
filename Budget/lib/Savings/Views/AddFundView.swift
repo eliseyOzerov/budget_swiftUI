@@ -84,6 +84,13 @@ struct AddFundView: View {
             .navigationTitle("New goal")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button(action: {
+                        presentation.wrappedValue.dismiss()
+                    }, label: {
+                        Text("Cancel")
+                    })
+                }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: {
                         model.addModifyFund(
@@ -96,7 +103,6 @@ struct AddFundView: View {
                     }, label: {
                         Text("Add")
                     })
-                    .buttonStyle(BoldButtonStyle())
                 }
         }
         }
