@@ -22,22 +22,21 @@ struct PickerOptionsView<T>: View where T: Titled, T: Identifiable {
             List(options) { option in
                 HStack {
                     Text(option.title)
-                        .onTapGesture {
-                            selection = option
-                            presentation.wrappedValue.dismiss()
-                        }
+                    Spacer()
                     if selection.id == option.id {
-                        Spacer()
                         Image(systemName: "checkmark")
                             .font(.system(size: 16, weight: .bold))
                             .foregroundColor(.blue)
                     }
                 }
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    selection = option
+                    presentation.wrappedValue.dismiss()
+                }
             }
             .padding(.top)
-            .listStyle(InsetGroupedListStyle())
             .background(Color(UIColor.systemGroupedBackground))
-            .edgesIgnoringSafeArea(.bottom)
             .navigationBarTitle("") // swiftui thing
             .navigationBarHidden(true)
         }
