@@ -52,9 +52,14 @@ class BudgetsViewModel: ObservableObject {
         return abs(transactionsModel.getTotal(category: budget.title, from: budget.lastReset, type: .expense))
     }
     
+    // only the remaining budget should be counted towards allocated funds, the spent part counts towards balance already
+    // so first we subtract the total budgeted amount as if no money has been spent in those budgets
+    // then we add the spent amount back in so as to not count it twice
     var unallocated: Double {
-        max(0, transactionsModel.balance -
-            budgets.reduce(0) { $0 + max(0, $1.budget) }) // max used bcs if budget is negative, it can't count towards unallocated/available funds
+        let balance = transactionsModel.balance
+        let budgeted = budgets.reduce(0) { $0 + max(0, $1.budget) } // max used bcs if budget is negative, it can't count towards unallocated/available funds
+        let spentSum = budgets.reduce(0) { $0 + spent(budget: $1) }
+        return max(0, balance - budgeted + spentSum)
     }
     
     public func resetAllBudgets() -> Void {
