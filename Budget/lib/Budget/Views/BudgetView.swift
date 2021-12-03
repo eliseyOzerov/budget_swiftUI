@@ -136,6 +136,7 @@ struct BudgetView: View {
                                     weekday: weekday,
                                     day: day,
                                     month: month,
+                                    lastReset: model.editedBudget?.lastReset ?? Date(),
                                     shouldAutosave: shouldAutosave,
                                     autosaveTo: autosaveTo // fundBinding not good - force unwrapping
                                 )
