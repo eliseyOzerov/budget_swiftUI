@@ -38,8 +38,8 @@ class Transaction: Hashable, Identifiable {
     var date: Date = Date()
     var total: Double = 1205.13
     var type: TransactionType = .income
-    var category: String = "FUCKING BITCH"
-    var secondParty: String = "Tovarna idej d.o.o."
+    var category: String = "Some category"
+    var secondParty: String = "A payee"
     
     var totalSigned: Double {
         switch type {
